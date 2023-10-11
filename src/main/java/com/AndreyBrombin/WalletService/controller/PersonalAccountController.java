@@ -118,6 +118,9 @@ public class PersonalAccountController {
         outputHandler.printMessage(configService.getProperty("personal.menu.message"));
     }
 
+    /**
+     * Выводит все транзакции пользователя, включая пополнение/снятие.
+     */
     private void printAllTransactions(PersonalAccountService personalAccountService) {
         List<TransactionModel> userTransactions = personalAccountService.getAllTransactions();
         OutputHandler outputHandler = dependencyContainer.getOutputHandler();

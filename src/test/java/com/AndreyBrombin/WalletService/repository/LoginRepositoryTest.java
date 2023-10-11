@@ -9,6 +9,9 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Юнит-тесты для класса LoginRepository.
+ */
 class LoginRepositoryTest {
     @Mock
     private AccountRepository accountRepository;
@@ -17,12 +20,18 @@ class LoginRepositoryTest {
 
     private LoginRepository loginRepository;
 
+    /**
+     * Настройка тестового окружения перед каждым тестом.
+     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         loginRepository = new LoginRepository(accountRepository);
     }
 
+    /**
+     * Тест для входа с существующим пользователем и правильным паролем.
+     */
     @Test
     void testLoginWithExistingUserAndCorrectPassword() {
         String login = "testUser";
@@ -39,8 +48,9 @@ class LoginRepositoryTest {
         assertTrue(result);
     }
 
-
-
+    /**
+     * Тест для входа с существующим пользователем и неправильным паролем.
+     */
     @Test
     void testLoginWithExistingUserAndIncorrectPassword() {
         String login = "testUser";
@@ -56,6 +66,9 @@ class LoginRepositoryTest {
         assertFalse(result);
     }
 
+    /**
+     * Тест для входа с несуществующим пользователем.
+     */
     @Test
     void testLoginWithNonExistingUser() {
         String login = "nonExistingUser";

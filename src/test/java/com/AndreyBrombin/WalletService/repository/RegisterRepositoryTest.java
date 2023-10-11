@@ -8,6 +8,9 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Юнит-тесты для класса RegisterRepository.
+ */
 class RegisterRepositoryTest {
     @Mock
     private AccountRepository accountRepository;
@@ -17,12 +20,18 @@ class RegisterRepositoryTest {
 
     private RegisterRepository registerRepository;
 
+    /**
+     * Настройка тестового окружения перед каждым тестом.
+     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         registerRepository = new RegisterRepository(accountRepository, walletRepository);
     }
 
+    /**
+     * Тест успешной регистрации пользователя.
+     */
     @Test
     void testSuccessfulRegistration() {
         // Arrange
@@ -42,6 +51,9 @@ class RegisterRepositoryTest {
         verifyNoMoreInteractions(accountRepository);
     }
 
+    /**
+     * Тест регистрации с существующим пользователем.
+     */
     @Test
     void testRegistrationWithExistingUser() {
         // Arrange

@@ -14,6 +14,9 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+/**
+ * Юнит-тесты для класса InputHandler.
+ */
 class InputHandlerTest {
     @Mock
     private Scanner scanner;
@@ -26,16 +29,22 @@ class InputHandlerTest {
         inputHandler = new InputHandler(scanner);
     }
 
+    /**
+     * Тест для чтения строки текста из ввода.
+     */
     @Test
     void testReadLine() {
         // Подготавливаем мок Scanner для ввода
-        when(scanner.nextLine()).thenReturn("Test input");
+        when(scanner.nextLine()).thenReturn("Тестовый ввод");
 
         String input = inputHandler.readLine();
 
-        assertEquals("Test input", input);
+        assertEquals("Тестовый ввод", input);
     }
 
+    /**
+     * Тест для чтения целого числа из ввода.
+     */
     @Test
     void testReadInt() {
         when(scanner.nextLine()).thenReturn("123");
@@ -45,6 +54,9 @@ class InputHandlerTest {
         assertEquals(123, number);
     }
 
+    /**
+     * Тест для чтения числа BigDecimal из ввода.
+     */
     @Test
     void testReadBigDecimal() {
         when(scanner.nextLine()).thenReturn("45.67");

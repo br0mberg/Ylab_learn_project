@@ -98,7 +98,9 @@ public class PersonalAccountService {
         WalletRepository walletRepository = dependencyContainer.getWalletRepository();
         return walletRepository.getWalletBalance(walletId);
     }
-
+    /**
+     * Получение тсписка всех транзакций хранящихся в "базе".
+     */
     public List<TransactionModel> getAllTransactions() {
         return dependencyContainer.getTransactionRepository().getAllTransactions();
     }

@@ -9,11 +9,17 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Юнит-тесты для класса OutputHandler.
+ */
 class OutputHandlerTest {
     private OutputHandler outputHandler;
     private ByteArrayOutputStream outputStream;
     private PrintStream originalSystemOut;
 
+    /**
+     * Настройка тестового окружения перед каждым тестом.
+     */
     @BeforeEach
     public void setUp() {
         originalSystemOut = System.out; // Сохраняем оригинальный System.out
@@ -23,6 +29,9 @@ class OutputHandlerTest {
         outputHandler = new OutputHandler(printStream);
     }
 
+    /**
+     * Тест для проверки вывода сообщения.
+     */
     @Test
     public void testPrintMessage() {
         String message = "Test message";
@@ -31,6 +40,9 @@ class OutputHandlerTest {
         assertEquals(message, output);
     }
 
+    /**
+     * Восстановление оригинального System.out после каждого теста.
+     */
     @AfterEach
     public void restoreSystemOut() {
         System.setOut(originalSystemOut); // Восстанавливаем оригинальный System.out

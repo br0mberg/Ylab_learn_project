@@ -15,12 +15,18 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Юнит-тесты для класса ConfigService.
+ */
 class ConfigServiceTest {
     private ConfigService configService;
 
     @Mock
     private Properties properties;
 
+    /**
+     * Настройка тестового окружения перед каждым тестом.
+     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this); // Инициализация моков
@@ -28,6 +34,9 @@ class ConfigServiceTest {
         configService.setProperties(properties);
     }
 
+    /**
+     * Тест получения значения свойства по ключу.
+     */
     @Test
     void testGetProperty() {
         // Arrange
@@ -47,6 +56,9 @@ class ConfigServiceTest {
         verify(properties).getProperty(key);
     }
 
+    /**
+     * Тест обработки исключения при создании ConfigService.
+     */
     @Test
     void testIOExceptionInConstructor() throws IOException {
         // Arrange

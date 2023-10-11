@@ -13,6 +13,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Юнит-тесты для класса WalletRepository.
+ */
 class WalletRepositoryTest {
 
     private WalletRepository walletRepository;
@@ -20,6 +23,9 @@ class WalletRepositoryTest {
     @TempDir
     File tempDir;
 
+    /**
+     * Настройка тестового окружения перед каждым тестом.
+     */
     @BeforeEach
     void setUp() {
         // Создаем временный файл внутри временной директории
@@ -27,6 +33,9 @@ class WalletRepositoryTest {
         walletRepository = new WalletRepository(tempFile.getAbsolutePath());
     }
 
+    /**
+     * Тест добавления кошелька в репозиторий.
+     */
     @Test
     void testAddWallet() {
         // Arrange
@@ -41,6 +50,9 @@ class WalletRepositoryTest {
         assertTrue(wallets.contains(wallet));
     }
 
+    /**
+     * Тест обновления кошелька в репозитории.
+     */
     @Test
     void testUpdateWallet() {
         // Создаем экземпляр WalletModel
@@ -67,6 +79,9 @@ class WalletRepositoryTest {
         assertTrue(updateResult);
     }
 
+    /**
+     * Тест получения кошелька по его ID.
+     */
     @Test
     void testGetWalletById() {
         // Создаем экземпляр WalletModel
@@ -85,6 +100,9 @@ class WalletRepositoryTest {
         assertEquals(wallet.getId(), retrievedWallet.getId());
     }
 
+    /**
+     * Тест получения баланса кошелька по его ID.
+     */
     @Test
     void testGetWalletBalance() {
         // Arrange
@@ -106,5 +124,4 @@ class WalletRepositoryTest {
         assertNotNull(balance);
         assertEquals(BigDecimal.valueOf(100.0), balance);
     }
-
 }

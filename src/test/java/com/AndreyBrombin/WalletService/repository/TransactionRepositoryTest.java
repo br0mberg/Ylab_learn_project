@@ -15,12 +15,18 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Юнит-тесты для класса TransactionRepository.
+ */
 class TransactionRepositoryTest {
     private TransactionRepository transactionRepository;
 
     @TempDir
     File tempDir;
 
+    /**
+     * Настройка тестового окружения перед каждым тестом.
+     */
     @BeforeEach
     void setUp() {
         // Используем временную директорию, где будет создан временный файл
@@ -28,6 +34,9 @@ class TransactionRepositoryTest {
         transactionRepository = new TransactionRepository(tempFile.getAbsolutePath());
     }
 
+    /**
+     * Тест добавления транзакции в репозиторий.
+     */
     @Test
     void testAddTransaction() {
         // Arrange
@@ -55,7 +64,9 @@ class TransactionRepositoryTest {
         assertTrue(transactions.contains(transaction));
     }
 
-
+    /**
+     * Тест загрузки транзакций из файла.
+     */
     @Test
     void testLoadTransactionsFromFile() {
         // Arrange
@@ -98,6 +109,9 @@ class TransactionRepositoryTest {
         assertTrue(loadedTransactions.contains(transaction3));
     }
 
+    /**
+     * Тест сохранения транзакций в файл.
+     */
     @Test
     void testSaveTransactionsToFile() {
         // Arrange

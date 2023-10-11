@@ -14,6 +14,9 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Юнит-тесты для класса LoginService.
+ */
 class LoginServiceTest {
 
     private LoginService loginService;
@@ -24,12 +27,18 @@ class LoginServiceTest {
     @Mock
     private WalletRepository walletRepository;
 
+    /**
+     * Настройка тестового окружения перед каждым тестом.
+     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         loginService = new LoginService(loginRepository, accountRepository);
     }
 
+    /**
+     * Тест аутентификации с валидными учетными данными.
+     */
     @Test
     void testAuthenticateValidAccount() {
         // Arrange
@@ -42,7 +51,9 @@ class LoginServiceTest {
         assertTrue(result);
     }
 
-
+    /**
+     * Тест аутентификации с невалидными учетными данными.
+     */
     @Test
     void testAuthenticateInvalidAccount() {
         // Arrange
@@ -55,6 +66,9 @@ class LoginServiceTest {
         assertFalse(result);
     }
 
+    /**
+     * Тест получения учетной записи по валидному логину.
+     */
     @Test
     void testGetAccountByValidLogin() {
         // Arrange
@@ -68,7 +82,9 @@ class LoginServiceTest {
         assertEquals(expectedAccount, result);
     }
 
-
+    /**
+     * Тест получения учетной записи по невалидному логину.
+     */
     @Test
     void testGetAccountByInvalidLogin() {
         // Arrange

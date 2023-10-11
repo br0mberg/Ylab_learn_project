@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+/**
+ * Юнит-тесты для класса RegistrationService.
+ */
 class RegistrationServiceTest {
     private RegistrationService registrationService;
 
@@ -24,12 +27,18 @@ class RegistrationServiceTest {
     @Mock
     private WalletRepository walletRepository;
 
+    /**
+     * Настройка тестового окружения перед каждым тестом.
+     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this); // Инициализация моков
         registrationService = new RegistrationService(registerRepository);
     }
 
+    /**
+     * Тест метода registerAccount с успешной регистрацией аккаунта.
+     */
     @Test
     void testRegisterValidAccount() {
         // Arrange
@@ -49,6 +58,9 @@ class RegistrationServiceTest {
         verify(registerRepository).register(name, surname, login, password, walletRepository);
     }
 
+    /**
+     * Тест метода registerAccount при передаче недопустимых значений.
+     */
     @Test
     void testRegisterInvalidAccount() {
         // Arrange
@@ -64,6 +76,9 @@ class RegistrationServiceTest {
         verifyNoInteractions(registerRepository);
     }
 
+    /**
+     * Тест метода registerAccount с успешной регистрацией аккаунта, но недопустимым репозиторием.
+     */
     @Test
     void testRegisterValidAccountInvalidRepository() {
         // Arrange

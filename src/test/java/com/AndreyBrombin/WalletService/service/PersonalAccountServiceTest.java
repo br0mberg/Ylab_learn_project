@@ -18,6 +18,9 @@ import java.math.BigInteger;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Юнит-тесты для класса PersonalAccountService.
+ */
 class PersonalAccountServiceTest {
     @Mock
     private PersonalAccountService personalAccountService;
@@ -32,6 +35,9 @@ class PersonalAccountServiceTest {
     @Mock
     private WalletRepository walletRepository;
 
+    /**
+     * Настройка тестового окружения перед каждым тестом.
+     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -51,7 +57,9 @@ class PersonalAccountServiceTest {
         walletRepository = dependencyContainer.getWalletRepository();
     }
 
-
+    /**
+     * Тест метода deposit с успешным внесением средств.
+     */
     @Test
     void testDeposit() {
         // Arrange
@@ -70,6 +78,9 @@ class PersonalAccountServiceTest {
         verify(inputHandler).readBigDecimal();
     }
 
+    /**
+     * Тест метода withdraw с успешным снятием средств.
+     */
     @Test
     void testWithdraw() {
         // Arrange
@@ -88,6 +99,9 @@ class PersonalAccountServiceTest {
         verify(inputHandler).readBigDecimal();
     }
 
+    /**
+     * Тест метода transfer с успешным переводом средств.
+     */
     @Test
     void testTransfer_SuccessfulTransfer() {
         // Arrange
@@ -118,6 +132,9 @@ class PersonalAccountServiceTest {
         verify(transactionService).transfer(senderWalletId, recipientAccount.getWalletOwnerId(), amount);
     }
 
+    /**
+     * Тест метода transfer при отсутствии получателя.
+     */
     @Test
     void testTransfer_RecipientNotFound() {
         // Arrange

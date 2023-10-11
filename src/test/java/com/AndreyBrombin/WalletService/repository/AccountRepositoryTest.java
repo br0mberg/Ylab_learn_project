@@ -12,6 +12,9 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Юнит-тесты для класса AccountRepository.
+ */
 class AccountRepositoryTest {
     @Mock
     private WalletRepository walletRepository;
@@ -21,6 +24,9 @@ class AccountRepositoryTest {
     @TempDir
     Path tempDir; // Создаем временную директорию для тестов
 
+    /**
+     * Настройка тестового окружения перед каждым тестом.
+     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -28,6 +34,9 @@ class AccountRepositoryTest {
         accountRepository = new AccountRepository(tempFilePath); // Используем временный файл
     }
 
+    /**
+     * Тест для регистрации новой учетной записи.
+     */
     @Test
     void testRegisterNewAccount() {
         String login = "testUser";
@@ -44,6 +53,9 @@ class AccountRepositoryTest {
         assertNotNull(account.getWalletId());
     }
 
+    /**
+     * Тест для регистрации существующей учетной записи.
+     */
     @Test
     void testRegisterExistingAccount() {
         String login = "existingUser";
@@ -58,6 +70,9 @@ class AccountRepositoryTest {
         assertEquals("password", account.getPassword());
     }
 
+    /**
+     * Тест для получения учетной записи по логину.
+     */
     @Test
     void testGetAccountByLogin() {
         String login = "testUser";

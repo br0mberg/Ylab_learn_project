@@ -48,6 +48,9 @@ public class TransactionRepository {
         return transactions;
     }
 
+    /**
+     * Выгружает список всех существующих транзакций из файла.
+     */
     private void loadTransactionsFromFile() {
         try {
             File file = new File(filePath);
@@ -65,7 +68,9 @@ public class TransactionRepository {
             logger.log(Level.SEVERE, "Error loading transactions from file.", e);
         }
     }
-
+    /**
+     * Сохраняет все существующие(новые) транзакции в файл.
+     */
     private void saveTransactionsToFile() {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(filePath);
