@@ -60,7 +60,11 @@ public class TransactionService {
                     new Date(),
                     TransactionType.DEPOSIT
             );
-
+            BigInteger depositTransactionId = (BigInteger) depositTransaction.getId();
+            if (transactionRepository.doesTransactionExist(depositTransactionId)) {
+                logger.log(Level.WARNING, "Transaction with the same ID already exists: " + depositTransactionId);
+                return false;
+            }
             transactionRepository.addTransaction(depositTransaction);
             return true;
         } catch (Exception e) {
@@ -97,6 +101,12 @@ public class TransactionService {
                     new Date(),
                     TransactionType.WITHDRAW
             );
+
+            BigInteger withdrawalTransactionId = (BigInteger) withdrawalTransaction.getId();
+            if (transactionRepository.doesTransactionExist(withdrawalTransactionId)) {
+                logger.log(Level.WARNING, "Transaction with the same ID already exists: " + withdrawalTransactionId);
+                return false;
+            }
 
             transactionRepository.addTransaction(withdrawalTransaction);
             return true;
@@ -152,6 +162,18 @@ public class TransactionService {
                     new Date(),
                     TransactionType.TRANSFER
             );
+
+            BigInteger senderTransactionId = (BigInteger) senderTransaction.getId();
+            if (transactionRepository.doesTransactionExist(senderTransactionId)) {
+                logger.log(Level.WARNING, "Transaction with the same ID already exists: " + senderTransactionId);
+                return false;
+            }
+
+            BigInteger receiverTransactionId = (BigInteger) receiverTransaction.getId();
+            if (transactionRepository.doesTransactionExist(receiverTransactionId)) {
+                logger.log(Level.WARNING, "Transaction with the same ID already exists: " + receiverTransaction);
+                return false;
+            }
 
             transactionRepository.addTransaction(senderTransaction);
             transactionRepository.addTransaction(receiverTransaction);

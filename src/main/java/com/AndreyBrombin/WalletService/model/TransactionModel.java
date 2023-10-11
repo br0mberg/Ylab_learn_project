@@ -67,4 +67,8 @@ public class TransactionModel implements Serializable {
                 Objects.equals(transactionDate, that.transactionDate) &&
                 transactionType == that.transactionType;
     }
+
+    public Object getId() {
+        return id;
+    }
 }

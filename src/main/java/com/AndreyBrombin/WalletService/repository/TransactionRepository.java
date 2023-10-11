@@ -3,6 +3,7 @@ package com.AndreyBrombin.WalletService.repository;
 import com.AndreyBrombin.WalletService.model.TransactionModel;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -84,5 +85,23 @@ public class TransactionRepository {
      */
     public String getFilePath() {
         return filePath;
+    }
+
+    /**
+     * Проверяет, существует ли транзакция с указанным идентификатором.
+     *
+     * @param transactionId Идентификатор транзакции для проверки.
+     * @return true, если транзакция с указанным идентификатором существует, в противном случае - false.
+     */
+    public boolean doesTransactionExist(BigInteger transactionId) {
+        loadTransactionsFromFile(); // Убедитесь, что транзакции загружены из файла
+
+        for (TransactionModel transaction : transactions) {
+            if (transaction.getId().equals(transactionId)) {
+                return true; // Транзакция с указанным идентификатором существует
+            }
+        }
+
+        return false; // Транзакция с указанным идентификатором не существует
     }
 }
