@@ -7,5 +7,18 @@ package com.AndreyBrombin.WalletService.model;
 public enum TransactionType {
     DEPOSIT,   // Тип транзакции - депозит
     TRANSFER,  // Тип транзакции - перевод
-    WITHDRAW   // Тип транзакции - снятие средств
+    WITHDRAW;   // Тип транзакции - снятие средств
+    @Override
+    public String toString() {
+        switch (this) {
+            case DEPOSIT:
+                return "Депозит";
+            case TRANSFER:
+                return "Перевод";
+            case WITHDRAW:
+                return "Снятие средств";
+            default:
+                return "Неизвестный тип";
+        }
+    }
 }

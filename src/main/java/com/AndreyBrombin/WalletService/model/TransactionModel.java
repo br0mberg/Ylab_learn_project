@@ -71,4 +71,16 @@ public class TransactionModel implements Serializable {
     public Object getId() {
         return id;
     }
+
+    public String getTransactionType() {
+        return transactionType.toString();
+    }
+
+    public String getAmount() {
+        return amount.toString();
+    }
+
+    public String getTransactionDate() {
+        return transactionDate.toString();
+    }
 }

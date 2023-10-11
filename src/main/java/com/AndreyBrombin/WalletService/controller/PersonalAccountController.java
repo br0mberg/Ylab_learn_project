@@ -4,10 +4,14 @@ import com.AndreyBrombin.WalletService.controller.in.InputHandler;
 import com.AndreyBrombin.WalletService.controller.out.OutputHandler;
 import com.AndreyBrombin.WalletService.infrastructure.DependencyContainer;
 import com.AndreyBrombin.WalletService.model.AccountModel;
+import com.AndreyBrombin.WalletService.model.TransactionModel;
 import com.AndreyBrombin.WalletService.service.ConfigService;
 import com.AndreyBrombin.WalletService.service.PersonalAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
 public class PersonalAccountController {
     private static final Logger logger = LoggerFactory.getLogger(PersonalAccountController.class);
     private AccountModel currentAccount;
@@ -50,6 +54,9 @@ public class PersonalAccountController {
                         handleBalance(outputHandler, configService, personalAccountService);
                         break;
                     case 5:
+                        printAllTransactions(personalAccountService); // Добавляем опцию вывода всех транзакций
+                        break;
+                    case 6:
                         isRunning = false;
                         break;
                     default:
@@ -109,5 +116,22 @@ public class PersonalAccountController {
         OutputHandler outputHandler = dependencyContainer.getOutputHandler();
         ConfigService configService = dependencyContainer.getConfigService();
         outputHandler.printMessage(configService.getProperty("personal.menu.message"));
+    }
+
+    private void printAllTransactions(PersonalAccountService personalAccountService) {
+        List<TransactionModel> userTransactions = personalAccountService.getAllTransactions();
+        OutputHandler outputHandler = dependencyContainer.getOutputHandler();
+
+        if (userTransactions.isEmpty()) {
+            outputHandler.printMessage("У вас пока нет ни одной транзакции.");
+        } else {
+            outputHandler.printMessage("Список ваших транзакций:");
+            for (TransactionModel transaction : userTransactions) {
+                outputHandler.printMessage("Тип: " + transaction.getTransactionType());
+                outputHandler.printMessage("Сумма: " + transaction.getAmount());
+                outputHandler.printMessage("Дата: " + transaction.getTransactionDate());
+                outputHandler.printMessage("-----");
+            }
+        }
     }
 }

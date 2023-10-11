@@ -4,11 +4,13 @@ import com.AndreyBrombin.WalletService.controller.in.InputHandler;
 import com.AndreyBrombin.WalletService.controller.out.OutputHandler;
 import com.AndreyBrombin.WalletService.infrastructure.DependencyContainer;
 import com.AndreyBrombin.WalletService.model.AccountModel;
+import com.AndreyBrombin.WalletService.model.TransactionModel;
 import com.AndreyBrombin.WalletService.repository.AccountRepository;
 import com.AndreyBrombin.WalletService.repository.WalletRepository;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  * Сервис для управления личным счетом и операциями с кошельком.
@@ -95,5 +97,9 @@ public class PersonalAccountService {
     public BigDecimal getWalletBalance(BigInteger walletId) {
         WalletRepository walletRepository = dependencyContainer.getWalletRepository();
         return walletRepository.getWalletBalance(walletId);
+    }
+
+    public List<TransactionModel> getAllTransactions() {
+        return dependencyContainer.getTransactionRepository().getAllTransactions();
     }
 }
