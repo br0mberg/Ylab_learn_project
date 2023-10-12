@@ -40,8 +40,11 @@ public class PersonalAccountService {
 
         outputHandler.printMessage("Enter the amount to deposit:");
         BigDecimal amount = inputHandler.readBigDecimal();
-
-        return transactionService.deposit(walletOwnerId, amount);
+        boolean result = transactionService.deposit(walletOwnerId, amount);
+        if (result) {
+            dependencyContainer.getAuditService().logDeposit(walletOwnerId, amount);
+        }
+        return result;
     }
 
     /**
@@ -57,8 +60,11 @@ public class PersonalAccountService {
 
         outputHandler.printMessage("Enter the amount to withdraw:");
         BigDecimal amount = inputHandler.readBigDecimal();
-
-        return transactionService.withdraw(walletId, amount);
+        boolean result = transactionService.withdraw(walletId, amount);
+        if (result) {
+            dependencyContainer.getAuditService().logWithdraw(walletId, amount);
+        }
+        return result;
     }
 
     /**
@@ -81,7 +87,11 @@ public class PersonalAccountService {
         AccountModel recipientAccount = accountRepository.getAccountByLogin(recipientLogin);
 
         if (recipientAccount != null) {
-            return transactionService.transfer(senderId, recipientAccount.getWalletOwnerId(), amount);
+            boolean result = transactionService.transfer(senderId, recipientAccount.getWalletOwnerId(), amount);
+            if (result) {
+                dependencyContainer.getAuditService().logTransfer(senderId, recipientAccount.getWalletOwnerId(), amount);
+            }
+            return result;
         } else {
             outputHandler.printMessage("Recipient not found. Please enter a valid login.");
             return false;
@@ -96,6 +106,7 @@ public class PersonalAccountService {
      */
     public BigDecimal getWalletBalance(BigInteger walletId) {
         WalletRepository walletRepository = dependencyContainer.getWalletRepository();
+        dependencyContainer.getAuditService().logBalanceRequest(walletId);
         return walletRepository.getWalletBalance(walletId);
     }
     /**

@@ -1,5 +1,6 @@
 package com.AndreyBrombin.WalletService.controller;
 
+import com.AndreyBrombin.WalletService.Logger.CustomLogger;
 import com.AndreyBrombin.WalletService.controller.in.InputHandler;
 import com.AndreyBrombin.WalletService.controller.out.OutputHandler;
 import com.AndreyBrombin.WalletService.infrastructure.DependencyContainer;
@@ -13,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 public class PersonalAccountController {
-    private static final Logger logger = LoggerFactory.getLogger(PersonalAccountController.class);
     private AccountModel currentAccount;
     private DependencyContainer dependencyContainer;
 
@@ -57,13 +57,14 @@ public class PersonalAccountController {
                         printAllTransactions(personalAccountService); // Добавляем опцию вывода всех транзакций
                         break;
                     case 6:
+                        dependencyContainer.getAuditService().logLogout(currentAccount.getLogin());
                         isRunning = false;
                         break;
                     default:
                         outputHandler.printMessage(configService.getProperty("input.error"));
                 }
             } catch (Exception e) {
-                logger.error("An error occurred: " + e.getMessage(), e);
+                CustomLogger.logError("An error occurred: " + e.getMessage(), e);
             }
         }
     }

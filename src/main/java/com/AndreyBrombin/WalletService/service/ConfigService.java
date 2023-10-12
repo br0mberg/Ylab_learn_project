@@ -1,5 +1,7 @@
 package com.AndreyBrombin.WalletService.service;
 
+import com.AndreyBrombin.WalletService.Logger.CustomLogger;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -21,7 +23,7 @@ public class ConfigService {
             properties.load(fileInputStream);
             fileInputStream.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            CustomLogger.logError("Error get data from config file", e);
         }
     }
 

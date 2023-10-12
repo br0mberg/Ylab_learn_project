@@ -1,5 +1,6 @@
 package com.AndreyBrombin.WalletService.controller;
 
+import com.AndreyBrombin.WalletService.Logger.CustomLogger;
 import com.AndreyBrombin.WalletService.controller.in.InputHandler;
 import com.AndreyBrombin.WalletService.controller.out.OutputHandler;
 import com.AndreyBrombin.WalletService.infrastructure.DependencyContainer;
@@ -17,7 +18,6 @@ import java.io.IOException;
  * Класс, управляющий главным меню приложения.
  */
 public class MainMenuController {
-    private static final Logger logger = LoggerFactory.getLogger(MainMenuController.class);
     private DependencyContainer dependencyContainer;
 
     /**
@@ -79,12 +79,13 @@ public class MainMenuController {
                 PersonalAccountController personalAccountController = new PersonalAccountController(
                         dependencyContainer,
                         loginService.getAccountByLogin(login));
+                dependencyContainer.getAuditService().logLogin(login);
                 personalAccountController.start();
             } else {
                 outputHandler.printMessage(configService.getProperty("invalid.credentials"));
             }
         } catch (Exception e) {
-            logger.error("An error occurred: " + e.getMessage(), e);
+            CustomLogger.logError("An error occurred: " + e.getMessage(), e);
         }
     }
 
@@ -113,7 +114,7 @@ public class MainMenuController {
                 outputHandler.printMessage(configService.getProperty("registration.error"));
             }
         } catch (Exception e) {
-            logger.error("An error occurred: " + e.getMessage(), e);
+            CustomLogger.logError("An error occurred: " + e.getMessage(), e);
         }
     }
 }

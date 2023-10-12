@@ -1,5 +1,6 @@
 package com.AndreyBrombin.WalletService.repository;
 
+import com.AndreyBrombin.WalletService.Logger.CustomLogger;
 import com.AndreyBrombin.WalletService.model.WalletModel;
 
 import java.io.*;
@@ -17,7 +18,6 @@ import java.util.logging.Logger;
  */
 public class WalletRepository {
     private List<WalletModel> wallets;
-    private static final Logger logger = Logger.getLogger(WalletRepository.class.getName());
     private String filePath;
 
     /**
@@ -62,12 +62,12 @@ public class WalletRepository {
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
                 wallets = (List<WalletModel>) objectInputStream.readObject();
                 objectInputStream.close();
-                logger.log(Level.INFO, "Wallets loaded from file.");
+                CustomLogger.logInfo("Wallets loaded from file.");
             } else {
-                logger.log(Level.INFO, "Wallet file is empty or does not exist.");
+                CustomLogger.logInfo("Wallet file is empty or does not exist.");
             }
         } catch (IOException | ClassNotFoundException e) {
-            logger.log(Level.SEVERE, "Error loading wallets from file.", e);
+            CustomLogger.logError( "Error loading wallets from file.", e);
         }
     }
 
@@ -82,9 +82,9 @@ public class WalletRepository {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(wallets);
             objectOutputStream.close();
-            logger.log(Level.INFO, "Wallets saved to file.");
+            CustomLogger.logInfo("Wallets saved to file.");
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Error saving wallets to file.", e);
+            CustomLogger.logError( "Error saving wallets to file.", e);
         }
     }
 
@@ -112,9 +112,9 @@ public class WalletRepository {
         }
 
         if (walletUpdated) {
-            logger.log(Level.INFO, "Wallet updated: " + updatedWallet.getId());
+            CustomLogger.logInfo("Wallet updated: " + updatedWallet.getId());
         } else {
-            logger.log(Level.WARNING, "Wallet not found for update: " + updatedWallet.getId());
+            CustomLogger.logWarning("Wallet not found for update: " + updatedWallet.getId());
         }
 
         return walletUpdated;

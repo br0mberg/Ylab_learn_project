@@ -1,5 +1,6 @@
 package com.AndreyBrombin.WalletService.service;
 
+import com.AndreyBrombin.WalletService.Logger.CustomLogger;
 import com.AndreyBrombin.WalletService.model.TransactionModel;
 import com.AndreyBrombin.WalletService.model.TransactionType;
 import com.AndreyBrombin.WalletService.model.WalletModel;
@@ -19,7 +20,6 @@ import java.util.logging.Logger;
 public class TransactionService {
     private TransactionRepository transactionRepository;
     private WalletRepository walletRepository;
-    private static final Logger logger = Logger.getLogger(TransactionService.class.getName());
 
     /**
      * Конструктор класса TransactionService.
@@ -62,13 +62,13 @@ public class TransactionService {
             );
             BigInteger depositTransactionId = (BigInteger) depositTransaction.getId();
             if (transactionRepository.doesTransactionExist(depositTransactionId)) {
-                logger.log(Level.WARNING, "Transaction with the same ID already exists: " + depositTransactionId);
+                CustomLogger.logWarning("Transaction with the same ID already exists: " + depositTransactionId);
                 return false;
             }
             transactionRepository.addTransaction(depositTransaction);
             return true;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error during deposit operation: " + e.getMessage());
+            CustomLogger.logError("Error during deposit operation: ", e);
             return false;
         }
     }
@@ -104,14 +104,14 @@ public class TransactionService {
 
             BigInteger withdrawalTransactionId = (BigInteger) withdrawalTransaction.getId();
             if (transactionRepository.doesTransactionExist(withdrawalTransactionId)) {
-                logger.log(Level.WARNING, "Transaction with the same ID already exists: " + withdrawalTransactionId);
+                CustomLogger.logWarning("Transaction with the same ID already exists: " + withdrawalTransactionId);
                 return false;
             }
 
             transactionRepository.addTransaction(withdrawalTransaction);
             return true;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error during withdrawal operation: " + e.getMessage());
+            CustomLogger.logError("Error during withdrawal operation: ", e);
             return false;
         }
     }
@@ -165,13 +165,13 @@ public class TransactionService {
 
             BigInteger senderTransactionId = (BigInteger) senderTransaction.getId();
             if (transactionRepository.doesTransactionExist(senderTransactionId)) {
-                logger.log(Level.WARNING, "Transaction with the same ID already exists: " + senderTransactionId);
+                CustomLogger.logWarning("Transaction with the same ID already exists: " + senderTransactionId);
                 return false;
             }
 
             BigInteger receiverTransactionId = (BigInteger) receiverTransaction.getId();
             if (transactionRepository.doesTransactionExist(receiverTransactionId)) {
-                logger.log(Level.WARNING, "Transaction with the same ID already exists: " + receiverTransaction);
+                CustomLogger.logWarning("Transaction with the same ID already exists: " + receiverTransaction);
                 return false;
             }
 
@@ -179,7 +179,7 @@ public class TransactionService {
             transactionRepository.addTransaction(receiverTransaction);
             return true;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error during transfer operation: " + e.getMessage());
+            CustomLogger.logError("Error during transfer operation: ", e);
             return false;
         }
     }

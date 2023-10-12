@@ -1,5 +1,6 @@
 package com.AndreyBrombin.WalletService.repository;
 
+import com.AndreyBrombin.WalletService.Logger.CustomLogger;
 import com.AndreyBrombin.WalletService.model.AccountModel;
 
 import java.io.*;
@@ -15,7 +16,6 @@ import java.util.logging.Level;
  */
 public class AccountRepository {
     private Map<String, AccountModel> accountCredentials; // Хранилище аккаунтов, где ключ - логин пользователя.
-    private static final Logger logger = Logger.getLogger(AccountRepository.class.getName());
     private String filePath;
 
     /**
@@ -49,7 +49,7 @@ public class AccountRepository {
                 return true;
             }
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Ошибка при регистрации аккаунта.", e);
+            CustomLogger.logError( "Ошибка при регистрации аккаунта.", e);
         }
         return false;
     }
@@ -68,12 +68,12 @@ public class AccountRepository {
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
                 accountCredentials = (Map<String, AccountModel>) objectInputStream.readObject();
                 objectInputStream.close();
-                logger.log(Level.INFO, "Файл не пуст, объекты выгружены");
+                CustomLogger.logInfo("Файл не пуст, объекты выгружены");
             } else {
-                logger.log(Level.INFO, "Файл с аккаунтами пустой или не существует.");
+                CustomLogger.logInfo( "Файл с аккаунтами пустой или не существует.");
             }
         } catch (ClassNotFoundException e) {
-            logger.log(Level.SEVERE, "Ошибка при загрузке аккаунтов из файла.", e);
+            CustomLogger.logError( "Ошибка при загрузке аккаунтов из файла.", e);
         }
         return accountCredentials;
     }
@@ -88,7 +88,7 @@ public class AccountRepository {
             objectOutputStream.writeObject(accountCredentials);
             objectOutputStream.close();
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Ошибка при сохранении аккаунтов в файл.", e);
+            CustomLogger.logError( "Ошибка при сохранении аккаунтов в файл.", e);
         }
     }
 
@@ -106,7 +106,7 @@ public class AccountRepository {
                 return accountCredentials.get(login);
             }
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Ошибка при получении аккаунта по логину.", e);
+            CustomLogger.logError("Ошибка при получении аккаунта по логину.", e);
         }
         return null; // Пользователь с таким логином не найден
     }

@@ -1,5 +1,6 @@
 package com.AndreyBrombin.WalletService.repository;
 
+import com.AndreyBrombin.WalletService.Logger.CustomLogger;
 import com.AndreyBrombin.WalletService.model.TransactionModel;
 
 import java.io.*;
@@ -15,7 +16,6 @@ import java.util.logging.Logger;
  */
 public class TransactionRepository {
     private List<TransactionModel> transactions;
-    private static final Logger logger = Logger.getLogger(TransactionRepository.class.getName());
     private String filePath;
 
     /**
@@ -60,12 +60,12 @@ public class TransactionRepository {
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
                 transactions = (List<TransactionModel>) objectInputStream.readObject();
                 objectInputStream.close();
-                logger.log(Level.INFO, "Transactions loaded from file.");
+                CustomLogger.logInfo( "Transactions loaded from file.");
             } else {
-                logger.log(Level.INFO, "Transaction file is empty or does not exist.");
+                CustomLogger.logInfo( "Transaction file is empty or does not exist.");
             }
         } catch (IOException | ClassNotFoundException e) {
-            logger.log(Level.SEVERE, "Error loading transactions from file.", e);
+            CustomLogger.logError( "Error loading transactions from file.", e);
         }
     }
     /**
@@ -77,9 +77,9 @@ public class TransactionRepository {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(transactions);
             objectOutputStream.close();
-            logger.log(Level.INFO, "Transactions saved to file.");
+            CustomLogger.logInfo("Transactions saved to file.");
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Error saving transactions to file.", e);
+            CustomLogger.logError("Error saving transactions to file.", e);
         }
     }
 

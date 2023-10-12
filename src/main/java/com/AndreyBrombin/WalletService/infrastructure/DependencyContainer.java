@@ -3,6 +3,7 @@ package com.AndreyBrombin.WalletService.infrastructure;
 import com.AndreyBrombin.WalletService.controller.in.InputHandler;
 import com.AndreyBrombin.WalletService.controller.out.OutputHandler;
 import com.AndreyBrombin.WalletService.repository.*;
+import com.AndreyBrombin.WalletService.service.AuditService;
 import com.AndreyBrombin.WalletService.service.Authorization.LoginService;
 import com.AndreyBrombin.WalletService.service.Authorization.RegistrationService;
 import com.AndreyBrombin.WalletService.service.ConfigService;
@@ -30,12 +31,14 @@ public class DependencyContainer {
     private TransactionRepository transactionRepository;
     private LoginService loginService;
 
+    private AuditService auditService;
+
     /**
      * Конструктор класса DependencyContainer. Инициализирует все зависимости при создании экземпляра.
      */
     public DependencyContainer() {
         this.configService = new ConfigService();
-
+        this.auditService = new AuditService("src/main/resources/auditLog.txt");
         this.outputHandler = new OutputHandler(new PrintStream(System.out));
         this.inputHandler = new InputHandler(new Scanner(System.in));
         this.accountRepository = new AccountRepository("src/main/resources/accounts.dat");
@@ -215,5 +218,9 @@ public class DependencyContainer {
      */
     public RegisterRepository getRegisterRepository() {
         return registerRepository;
+    }
+
+    public AuditService getAuditService() {
+        return auditService;
     }
 }

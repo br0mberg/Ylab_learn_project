@@ -1,5 +1,6 @@
 package com.AndreyBrombin.WalletService.repository;
 
+import com.AndreyBrombin.WalletService.Logger.CustomLogger;
 import com.AndreyBrombin.WalletService.model.AccountModel;
 
 import java.io.IOException;
@@ -12,7 +13,6 @@ import java.util.logging.Logger;
  */
 public class LoginRepository {
     private AccountRepository accountRepository;
-    private static final Logger logger = Logger.getLogger(LoginRepository.class.getName());
 
     /**
      * Создает новый экземпляр репозитория аутентификации на основе репозитория аккаунтов.
@@ -34,7 +34,7 @@ public class LoginRepository {
         AccountModel account = accountRepository.getAccountByLogin(login);
 
         if (account != null) {
-            logger.log(Level.INFO, "Такой логин нашли");
+            CustomLogger.logInfo( "Такой логин нашли");
             return account.getPassword().equals(password);
         }
         return false; // Пользователь с таким логином не существует
