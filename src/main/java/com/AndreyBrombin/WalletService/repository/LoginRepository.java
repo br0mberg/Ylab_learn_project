@@ -37,6 +37,6 @@ public class LoginRepository {
             CustomLogger.logInfo( "Такой логин нашли");
             return account.getPassword().equals(password);
         }
-        return false; // Пользователь с таким логином не существует
+        return false;
     }
 }

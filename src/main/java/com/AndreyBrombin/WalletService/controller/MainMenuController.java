@@ -8,11 +8,6 @@ import com.AndreyBrombin.WalletService.repository.AccountRepository;
 import com.AndreyBrombin.WalletService.service.Authorization.LoginService;
 import com.AndreyBrombin.WalletService.service.Authorization.RegistrationService;
 import com.AndreyBrombin.WalletService.service.ConfigService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-
 
 /**
  * Класс, управляющий главным меню приложения.
@@ -89,9 +84,6 @@ public class MainMenuController {
         }
     }
 
-    /**
-     * Обрабатывает процесс регистрации нового аккаунта.
-     */
     private void handleRegistration() {
         OutputHandler outputHandler = dependencyContainer.getOutputHandler();
         ConfigService configService = dependencyContainer.getConfigService();

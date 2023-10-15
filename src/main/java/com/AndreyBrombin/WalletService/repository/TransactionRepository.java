@@ -99,14 +99,14 @@ public class TransactionRepository {
      * @return true, если транзакция с указанным идентификатором существует, в противном случае - false.
      */
     public boolean doesTransactionExist(BigInteger transactionId) {
-        loadTransactionsFromFile(); // Убедитесь, что транзакции загружены из файла
+        loadTransactionsFromFile();
 
         for (TransactionModel transaction : transactions) {
             if (transaction.getId().equals(transactionId)) {
-                return true; // Транзакция с указанным идентификатором существует
+                return true;
             }
         }
 
-        return false; // Транзакция с указанным идентификатором не существует
+        return false;
     }
 }

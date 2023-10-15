@@ -68,18 +68,38 @@ public class TransactionModel implements Serializable {
                 transactionType == that.transactionType;
     }
 
+    /**
+     * Получает идентификатор (ID) данной транзакции.
+     *
+     * @return Идентификатор (ID) транзакции.
+     */
     public Object getId() {
         return id;
     }
 
+    /**
+     * Получает тип данной транзакции в виде строки.
+     *
+     * @return Тип транзакции в виде строки.
+     */
     public String getTransactionType() {
         return transactionType.toString();
     }
 
+    /**
+     * Получает сумму транзакции в виде строки.
+     *
+     * @return Сумма транзакции в виде строки.
+     */
     public String getAmount() {
         return amount.toString();
     }
 
+    /**
+     * Получает дату транзакции в виде строки.
+     *
+     * @return Дата транзакции в виде строки.
+     */
     public String getTransactionDate() {
         return transactionDate.toString();
     }

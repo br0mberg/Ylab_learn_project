@@ -219,7 +219,10 @@ public class DependencyContainer {
     public RegisterRepository getRegisterRepository() {
         return registerRepository;
     }
-
+    /**
+     * Получить объект сервиса аудита.
+     * @return Объект AuditService.
+     */
     public AuditService getAuditService() {
         return auditService;
     }

@@ -8,15 +8,21 @@ import com.AndreyBrombin.WalletService.model.AccountModel;
 import com.AndreyBrombin.WalletService.model.TransactionModel;
 import com.AndreyBrombin.WalletService.service.ConfigService;
 import com.AndreyBrombin.WalletService.service.PersonalAccountService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
-
+/**
+ * Контроллер для управления личным кабинетом аккаунта пользователя.
+ */
 public class PersonalAccountController {
     private AccountModel currentAccount;
     private DependencyContainer dependencyContainer;
 
+    /**
+     * Создает новый экземпляр контроллера личного кабинета аккаунта пользователя.
+     *
+     * @param dependencyContainer Контейнер зависимостей, предоставляющий доступ к необходимым службам и компонентам.
+     * @param currentAccount     Текущий аккаунт пользователя, для которого запускается личный кабинет.
+     */
     public PersonalAccountController(DependencyContainer dependencyContainer,AccountModel currentAccount) {
         this.currentAccount = currentAccount;
         this.dependencyContainer = dependencyContainer;
@@ -68,9 +74,7 @@ public class PersonalAccountController {
             }
         }
     }
-    /**
-     * Выполнение запроса пользователя - депозит.
-     */
+
     private void handleDeposit(OutputHandler outputHandler, ConfigService configService, PersonalAccountService personalAccountService) {
         boolean depositSuccess = personalAccountService.deposit(currentAccount.getWalletOwnerId());
         if (depositSuccess) {
@@ -79,9 +83,7 @@ public class PersonalAccountController {
             outputHandler.printMessage(configService.getProperty("error.operation.message"));
         }
     }
-    /**
-     * Выполнение запроса пользователя - снятие средств.
-     */
+
     private void handleWithdraw(OutputHandler outputHandler, ConfigService configService, PersonalAccountService personalAccountService) {
         boolean withdrawSuccess = personalAccountService.withdraw(currentAccount.getWalletOwnerId());
         if (withdrawSuccess) {
@@ -90,9 +92,7 @@ public class PersonalAccountController {
             outputHandler.printMessage(configService.getProperty("error.operation.message"));
         }
     }
-    /**
-     * Выполнение запроса пользователя - перевод другому пользователю.
-     */
+
     private void handleTransfer(OutputHandler outputHandler, ConfigService configService, PersonalAccountService personalAccountService) {
         boolean transferSuccess = personalAccountService.transfer(currentAccount.getWalletOwnerId());
         if (transferSuccess) {
@@ -101,27 +101,18 @@ public class PersonalAccountController {
             outputHandler.printMessage(configService.getProperty("error.operation.message"));
         }
     }
-    /**
-     * Выполнение запроса пользователя - получение баланса.
-     */
+
     private void handleBalance(OutputHandler outputHandler, ConfigService configService, PersonalAccountService personalAccountService) {
         outputHandler.printMessage(configService.getProperty("balance.message") +
                 String.valueOf(personalAccountService.getWalletBalance(currentAccount.getWalletOwnerId())));
     }
 
-
-    /**
-     * Выводит меню личного кабинета аккаунта.
-     */
     private void printMenu() {
         OutputHandler outputHandler = dependencyContainer.getOutputHandler();
         ConfigService configService = dependencyContainer.getConfigService();
         outputHandler.printMessage(configService.getProperty("personal.menu.message"));
     }
 
-    /**
-     * Выводит все транзакции пользователя, включая пополнение/снятие.
-     */
     private void printAllTransactions(PersonalAccountService personalAccountService) {
         List<TransactionModel> userTransactions = personalAccountService.getAllTransactions();
         OutputHandler outputHandler = dependencyContainer.getOutputHandler();

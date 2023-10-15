@@ -13,11 +13,11 @@ import java.util.UUID;
  * Каждый кошелек имеет уникальный идентификатор (ID), владельца, имя кошелька, баланс и список транзакций.
  */
 public class WalletModel implements Serializable {
-    private BigInteger id;           // Уникальный идентификатор кошелька
-    private BigInteger ownerId;       // ID владельца кошелька
-    private String walletName;        // Имя кошелька
-    private BigDecimal balance;       // Баланс кошелька
-    private List<TransactionModel> transactions;  // Список транзакций, связанных с кошельком
+    private BigInteger id;
+    private BigInteger ownerId;
+    private String walletName;
+    private BigDecimal balance;
+    private List<TransactionModel> transactions;
 
     /**
      * Создает новый экземпляр кошелька для указанного владельца.
@@ -26,10 +26,8 @@ public class WalletModel implements Serializable {
     public WalletModel(BigInteger ownerId) {
         UUID uuid = UUID.randomUUID();
 
-        // Преобразование UUID в 16-ричную строку без дефисов
         String uuidString = uuid.toString().replace("-", "");
 
-        // Создание объекта BigInteger из 16-ричной строки
         this.id = new BigInteger(uuidString, 16);
 
         this.ownerId = ownerId;

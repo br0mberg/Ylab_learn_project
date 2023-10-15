@@ -101,13 +101,11 @@ public class WalletRepository {
         for (int i = 0; i < wallets.size(); i++) {
             WalletModel wallet = wallets.get(i);
             if (wallet.getOwnerId().equals(updatedWallet.getOwnerId())) {
-                // Найден кошелек с тем же ID, что и у обновленного кошелька
-                // Заменяем текущий кошелек на обновленный
                 wallets.set(i, updatedWallet);
-                // Сохраняем обновленный список кошельков в файл
+
                 saveWalletsToFile();
                 walletUpdated = true;
-                break; // Выходим из цикла, так как обновление выполнено
+                break;
             }
         }
 
@@ -129,15 +127,15 @@ public class WalletRepository {
      * @throws ClassNotFoundException   Если возникла ошибка при десериализации объектов из файла.
      */
     public WalletModel getWalletById(BigInteger ownerId) {
-        loadWalletsFromFile(); // Загрузить актуальные кошельки из файла
+        loadWalletsFromFile();
 
         for (WalletModel wallet : wallets) {
             if (wallet.getOwnerId().equals(ownerId)) {
-                return wallet; // Найден кошелек с указанным ID владельца
+                return wallet;
             }
         }
 
-        return null; // Кошелек с указанным ID не найден
+        return null;
     }
 
     /**
@@ -151,6 +149,6 @@ public class WalletRepository {
         if (wallet != null) {
             return wallet.getBalance();
         }
-        return BigDecimal.ZERO; // 0 как значение по умолчанию.
+        return BigDecimal.ZERO;
     }
 }

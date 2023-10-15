@@ -15,7 +15,7 @@ import java.util.logging.Level;
  * сохранения аккаунтов в файл, а также поиск аккаунта по логину.
  */
 public class AccountRepository {
-    private Map<String, AccountModel> accountCredentials; // Хранилище аккаунтов, где ключ - логин пользователя.
+    private Map<String, AccountModel> accountCredentials;
     private String filePath;
 
     /**
@@ -108,6 +108,6 @@ public class AccountRepository {
         } catch (IOException e) {
             CustomLogger.logError("Ошибка при получении аккаунта по логину.", e);
         }
-        return null; // Пользователь с таким логином не найден
+        return null;
     }
 }

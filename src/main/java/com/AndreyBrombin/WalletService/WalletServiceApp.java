@@ -10,11 +10,8 @@ import com.AndreyBrombin.WalletService.infrastructure.DependencyContainer;
  */
 public class WalletServiceApp {
     public static void main(String[] args) {
-        // Создание DependencyContainer для управления зависимостями приложения.
         DependencyContainer container = new DependencyContainer();
-        // Инициализация контроллера главного меню с использованием DependencyContainer.
         MainMenuController mainMenuController = new MainMenuController(container);
-        // Запуск главного меню.
         mainMenuController.start();
     }
 }
