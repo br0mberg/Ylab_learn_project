@@ -6,7 +6,7 @@ import com.AndreyBrombin.WalletService.repository.*;
 import com.AndreyBrombin.WalletService.service.AuditService;
 import com.AndreyBrombin.WalletService.service.Authorization.LoginService;
 import com.AndreyBrombin.WalletService.service.Authorization.RegistrationService;
-import com.AndreyBrombin.WalletService.service.ConfigService;
+import com.AndreyBrombin.WalletService.util.ConfigUtil;
 import com.AndreyBrombin.WalletService.service.PersonalAccountService;
 import com.AndreyBrombin.WalletService.service.TransactionService;
 
@@ -18,7 +18,7 @@ import java.util.Scanner;
  * необходимым для функционирования приложения.
  */
 public class DependencyContainer {
-    private ConfigService configService;
+    private ConfigUtil configUtil;
     private TransactionService transactionService;
     private OutputHandler outputHandler;
     private InputHandler inputHandler;
@@ -30,22 +30,21 @@ public class DependencyContainer {
     private LoginRepository loginRepository;
     private TransactionRepository transactionRepository;
     private LoginService loginService;
-
     private AuditService auditService;
 
     /**
      * Конструктор класса DependencyContainer. Инициализирует все зависимости при создании экземпляра.
      */
     public DependencyContainer() {
-        this.configService = new ConfigService();
+        this.configUtil = new ConfigUtil();
         this.auditService = new AuditService("src/main/resources/auditLog.txt");
         this.outputHandler = new OutputHandler(new PrintStream(System.out));
         this.inputHandler = new InputHandler(new Scanner(System.in));
-        this.accountRepository = new AccountRepository("src/main/resources/accounts.dat");
-        this.walletRepository = new WalletRepository("src/main/resources/wallets.dat");
+        this.accountRepository = new AccountRepository();
+        this.walletRepository = new WalletRepository();
         this.registerRepository = new RegisterRepository(accountRepository, walletRepository);
         this.registrationService = new RegistrationService(registerRepository);
-        this.transactionRepository = new TransactionRepository("src/main/resources/transactions.dat");
+        this.transactionRepository = new TransactionRepository();
         this.transactionService = new TransactionService(transactionRepository, walletRepository);
         this.loginRepository = new LoginRepository(this.accountRepository);
         this.loginService = new LoginService(loginRepository, accountRepository);
@@ -56,8 +55,8 @@ public class DependencyContainer {
      * Получить объект службы конфигурации.
      * @return Объект ConfigService.
      */
-    public ConfigService getConfigService() {
-        return configService;
+    public ConfigUtil getConfigService() {
+        return configUtil;
     }
 
     /**
@@ -134,10 +133,10 @@ public class DependencyContainer {
 
     /**
      * Установить объект службы конфигурации.
-     * @param configService Объект ConfigService для установки.
+     * @param configUtil Объект ConfigService для установки.
      */
-    public void setConfigService(ConfigService configService) {
-        this.configService = configService;
+    public void setConfigService(ConfigUtil configUtil) {
+        this.configUtil = configUtil;
     }
 
     /**

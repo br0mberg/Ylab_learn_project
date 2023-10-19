@@ -1,7 +1,13 @@
 package com.AndreyBrombin.WalletService.service.Authorization;
 
+import com.AndreyBrombin.WalletService.model.AccountModel;
 import com.AndreyBrombin.WalletService.repository.RegisterRepository;
 import com.AndreyBrombin.WalletService.repository.WalletRepository;
+
+import java.math.BigInteger;
+import java.sql.SQLException;
+
+import static com.AndreyBrombin.WalletService.model.AccountModel.generateUniqueId;
 
 /**
  * Сервис для регистрации новых учетных записей.
@@ -28,7 +34,7 @@ public class RegistrationService {
      * @param walletRepository Репозиторий для управления кошельками.
      * @return true, если регистрация прошла успешно, иначе false.
      */
-    public boolean registerAccount(String name, String surname, String login, String password, WalletRepository walletRepository) {
+    public boolean registerAccount(String name, String surname, String login, String password, WalletRepository walletRepository) throws SQLException {
         if (validateAccountData(name, surname, login, password)) {
             return registerRepository.register(name, surname, login, password, walletRepository);
         }

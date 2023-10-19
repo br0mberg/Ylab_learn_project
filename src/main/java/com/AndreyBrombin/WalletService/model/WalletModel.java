@@ -1,5 +1,8 @@
 package com.AndreyBrombin.WalletService.model;
 
+import com.AndreyBrombin.WalletService.repository.TransactionRepository;
+import com.AndreyBrombin.WalletService.repository.WalletRepository;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -13,27 +16,41 @@ import java.util.UUID;
  * Каждый кошелек имеет уникальный идентификатор (ID), владельца, имя кошелька, баланс и список транзакций.
  */
 public class WalletModel implements Serializable {
+    private static BigInteger walletCounter = BigInteger.ONE;
     private BigInteger id;
     private BigInteger ownerId;
     private String walletName;
     private BigDecimal balance;
-    private List<TransactionModel> transactions;
 
     /**
      * Создает новый экземпляр кошелька для указанного владельца.
      * @param ownerId ID владельца кошелька.
      */
-    public WalletModel(BigInteger ownerId) {
-        UUID uuid = UUID.randomUUID();
-
-        String uuidString = uuid.toString().replace("-", "");
-
-        this.id = new BigInteger(uuidString, 16);
-
+    public WalletModel(BigInteger id, BigInteger ownerId) {
+        this.id = id;
         this.ownerId = ownerId;
         this.walletName = ownerId + "Wallet's";
         this.balance = BigDecimal.valueOf(0);
-        this.transactions = new ArrayList<>();
+    }
+    /**
+     * Создает новый экземпляр кошелька для указанного владельца.
+     * @param ownerId ID владельца кошелька.
+     */
+    public WalletModel(BigInteger id, BigInteger ownerId, String walletName, BigDecimal balance) {
+        this.id = id;
+        this.ownerId = ownerId;
+        this.walletName = walletName;
+        this.balance = balance;
+    }
+
+    /**
+     * Генерирует уникальный идентификатор транзакции на основе счетчика транзакций.
+     * @return Уникальный идентификатор транзакции.
+     */
+    public static BigInteger generateWalletId() {
+        synchronized (WalletRepository.class) {
+            return walletCounter.add(BigInteger.ONE);
+        }
     }
 
     /**
@@ -85,5 +102,9 @@ public class WalletModel implements Serializable {
                 Objects.equals(ownerId, that.ownerId) &&
                 Objects.equals(walletName, that.walletName) &&
                 Objects.equals(balance, that.balance);
+    }
+
+    public String getName() {
+        return walletName;
     }
 }

@@ -6,9 +6,10 @@ import com.AndreyBrombin.WalletService.controller.out.OutputHandler;
 import com.AndreyBrombin.WalletService.infrastructure.DependencyContainer;
 import com.AndreyBrombin.WalletService.model.AccountModel;
 import com.AndreyBrombin.WalletService.model.TransactionModel;
-import com.AndreyBrombin.WalletService.service.ConfigService;
+import com.AndreyBrombin.WalletService.util.ConfigUtil;
 import com.AndreyBrombin.WalletService.service.PersonalAccountService;
 
+import java.math.BigInteger;
 import java.util.List;
 /**
  * Контроллер для управления личным кабинетом аккаунта пользователя.
@@ -33,7 +34,7 @@ public class PersonalAccountController {
      */
     public void start() {
         OutputHandler outputHandler = dependencyContainer.getOutputHandler();
-        ConfigService configService = dependencyContainer.getConfigService();
+        ConfigUtil configUtil = dependencyContainer.getConfigService();
         InputHandler inputHandler = dependencyContainer.getInputHandler();
         PersonalAccountService personalAccountService = dependencyContainer.getPersonalAccountService();
 
@@ -48,26 +49,26 @@ public class PersonalAccountController {
             try {
                 switch (choice) {
                     case 1:
-                        handleDeposit(outputHandler, configService, personalAccountService);
+                        handleDeposit(outputHandler, configUtil, personalAccountService);
                         break;
                     case 2:
-                        handleWithdraw(outputHandler, configService, personalAccountService);
+                        handleWithdraw(outputHandler, configUtil, personalAccountService);
                         break;
                     case 3:
-                        handleTransfer(outputHandler, configService, personalAccountService);
+                        handleTransfer(outputHandler, configUtil, personalAccountService);
                         break;
                     case 4:
-                        handleBalance(outputHandler, configService, personalAccountService);
+                        handleBalance(outputHandler, configUtil, personalAccountService);
                         break;
                     case 5:
-                        printAllTransactions(personalAccountService); // Добавляем опцию вывода всех транзакций
+                        printAllTransactions(personalAccountService, currentAccount.getId());
                         break;
                     case 6:
                         dependencyContainer.getAuditService().logLogout(currentAccount.getLogin());
                         isRunning = false;
                         break;
                     default:
-                        outputHandler.printMessage(configService.getProperty("input.error"));
+                        outputHandler.printMessage(configUtil.getProperty("input.error"));
                 }
             } catch (Exception e) {
                 CustomLogger.logError("An error occurred: " + e.getMessage(), e);
@@ -75,46 +76,46 @@ public class PersonalAccountController {
         }
     }
 
-    private void handleDeposit(OutputHandler outputHandler, ConfigService configService, PersonalAccountService personalAccountService) {
+    private void handleDeposit(OutputHandler outputHandler, ConfigUtil configUtil, PersonalAccountService personalAccountService) {
         boolean depositSuccess = personalAccountService.deposit(currentAccount.getWalletOwnerId());
         if (depositSuccess) {
-            outputHandler.printMessage(configService.getProperty("success.deposit.message"));
+            outputHandler.printMessage(configUtil.getProperty("success.deposit.message"));
         } else {
-            outputHandler.printMessage(configService.getProperty("error.operation.message"));
+            outputHandler.printMessage(configUtil.getProperty("error.operation.message"));
         }
     }
 
-    private void handleWithdraw(OutputHandler outputHandler, ConfigService configService, PersonalAccountService personalAccountService) {
+    private void handleWithdraw(OutputHandler outputHandler, ConfigUtil configUtil, PersonalAccountService personalAccountService) {
         boolean withdrawSuccess = personalAccountService.withdraw(currentAccount.getWalletOwnerId());
         if (withdrawSuccess) {
-            outputHandler.printMessage(configService.getProperty("success.withdraw.message"));
+            outputHandler.printMessage(configUtil.getProperty("success.withdraw.message"));
         } else {
-            outputHandler.printMessage(configService.getProperty("error.operation.message"));
+            outputHandler.printMessage(configUtil.getProperty("error.operation.message"));
         }
     }
 
-    private void handleTransfer(OutputHandler outputHandler, ConfigService configService, PersonalAccountService personalAccountService) {
+    private void handleTransfer(OutputHandler outputHandler, ConfigUtil configUtil, PersonalAccountService personalAccountService) {
         boolean transferSuccess = personalAccountService.transfer(currentAccount.getWalletOwnerId());
         if (transferSuccess) {
-            outputHandler.printMessage(configService.getProperty("success.transfer.message"));
+            outputHandler.printMessage(configUtil.getProperty("success.transfer.message"));
         } else {
-            outputHandler.printMessage(configService.getProperty("error.operation.message"));
+            outputHandler.printMessage(configUtil.getProperty("error.operation.message"));
         }
     }
 
-    private void handleBalance(OutputHandler outputHandler, ConfigService configService, PersonalAccountService personalAccountService) {
-        outputHandler.printMessage(configService.getProperty("balance.message") +
+    private void handleBalance(OutputHandler outputHandler, ConfigUtil configUtil, PersonalAccountService personalAccountService) {
+        outputHandler.printMessage(configUtil.getProperty("balance.message") +
                 String.valueOf(personalAccountService.getWalletBalance(currentAccount.getWalletOwnerId())));
     }
 
     private void printMenu() {
         OutputHandler outputHandler = dependencyContainer.getOutputHandler();
-        ConfigService configService = dependencyContainer.getConfigService();
-        outputHandler.printMessage(configService.getProperty("personal.menu.message"));
+        ConfigUtil configUtil = dependencyContainer.getConfigService();
+        outputHandler.printMessage(configUtil.getProperty("personal.menu.message"));
     }
 
-    private void printAllTransactions(PersonalAccountService personalAccountService) {
-        List<TransactionModel> userTransactions = personalAccountService.getAllTransactions();
+    private void printAllTransactions(PersonalAccountService personalAccountService, BigInteger accountId) {
+        List<TransactionModel> userTransactions = personalAccountService.getAllTransactionsByAccount(accountId);
         OutputHandler outputHandler = dependencyContainer.getOutputHandler();
 
         if (userTransactions.isEmpty()) {

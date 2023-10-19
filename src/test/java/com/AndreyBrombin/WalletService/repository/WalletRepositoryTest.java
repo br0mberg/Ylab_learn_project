@@ -1,7 +1,6 @@
 package com.AndreyBrombin.WalletService.repository;
 
 import com.AndreyBrombin.WalletService.model.WalletModel;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -66,7 +65,7 @@ class WalletRepositoryTest {
         updatedWallet.setId(wallet.getId());
 
         // Попробуем обновить кошелек
-        boolean updateResult = walletRepository.updateWallet(updatedWallet);
+        boolean updateResult = walletRepository.updateWalletBalance(updatedWallet);
 
         // Выводим информацию о результате
         if (updateResult) {

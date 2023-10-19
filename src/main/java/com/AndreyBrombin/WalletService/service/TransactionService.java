@@ -11,8 +11,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Сервис для управления транзакциями и операциями над кошельками.
@@ -51,11 +49,12 @@ public class TransactionService {
 
         try {
             // Обновляем информацию о кошельке в репозитории
-            walletRepository.updateWallet(wallet);
+            walletRepository.updateWalletBalance(wallet);
 
             TransactionModel depositTransaction = new TransactionModel(
+                    transactionRepository.loadLastIdFromDatabase().add(BigInteger.ONE),
                     wallet.getId(),
-                    null,
+                    wallet.getId(),
                     amount,
                     new Date(),
                     TransactionType.DEPOSIT
@@ -92,11 +91,12 @@ public class TransactionService {
 
         try {
             // Обновляем информацию о кошельке в репозитории
-            walletRepository.updateWallet(wallet);
+            walletRepository.updateWalletBalance(wallet);
 
             TransactionModel withdrawalTransaction = new TransactionModel(
+                    transactionRepository.loadLastIdFromDatabase().add(BigInteger.ONE),
                     wallet.getId(),
-                    null,
+                    wallet.getId(),
                     amount,
                     new Date(),
                     TransactionType.WITHDRAW
@@ -129,7 +129,7 @@ public class TransactionService {
         WalletModel receiverWallet = walletRepository.getWalletById(receiverWalletId);
 
         if (senderWallet == null || receiverWallet == null) {
-            return false; // Один из кошельков не найден, возвращаем false
+            return false;
         }
 
         if (amount.compareTo(BigDecimal.ZERO) <= 0 || amount.compareTo(senderWallet.getBalance()) > 0) {
@@ -144,10 +144,11 @@ public class TransactionService {
 
         try {
             // Обновляем информацию о кошельках в репозитории
-            walletRepository.updateWallet(senderWallet);
-            walletRepository.updateWallet(receiverWallet);
-
+            walletRepository.updateWalletBalance(senderWallet);
+            walletRepository.updateWalletBalance(receiverWallet);
+            BigInteger transactionId = transactionRepository.loadLastIdFromDatabase().add(BigInteger.ONE);
             TransactionModel senderTransaction = new TransactionModel(
+                    transactionId,
                     senderWallet.getId(),
                     receiverWallet.getId(),
                     amount,
@@ -155,13 +156,6 @@ public class TransactionService {
                     TransactionType.TRANSFER
             );
 
-            TransactionModel receiverTransaction = new TransactionModel(
-                    receiverWallet.getId(),
-                    senderWallet.getId(),
-                    amount,
-                    new Date(),
-                    TransactionType.TRANSFER
-            );
 
             BigInteger senderTransactionId = (BigInteger) senderTransaction.getId();
             if (transactionRepository.doesTransactionExist(senderTransactionId)) {
@@ -169,14 +163,7 @@ public class TransactionService {
                 return false;
             }
 
-            BigInteger receiverTransactionId = (BigInteger) receiverTransaction.getId();
-            if (transactionRepository.doesTransactionExist(receiverTransactionId)) {
-                CustomLogger.logWarning("Transaction with the same ID already exists: " + receiverTransaction);
-                return false;
-            }
-
             transactionRepository.addTransaction(senderTransaction);
-            transactionRepository.addTransaction(receiverTransaction);
             return true;
         } catch (Exception e) {
             CustomLogger.logError("Error during transfer operation: ", e);

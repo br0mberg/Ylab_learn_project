@@ -1,5 +1,6 @@
 package com.AndreyBrombin.WalletService.service;
 
+import com.AndreyBrombin.WalletService.util.ConfigUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -18,8 +19,8 @@ import static org.mockito.Mockito.when;
 /**
  * Юнит-тесты для класса ConfigService.
  */
-class ConfigServiceTest {
-    private ConfigService configService;
+class ConfigUtilTest {
+    private ConfigUtil configUtil;
 
     @Mock
     private Properties properties;
@@ -30,8 +31,8 @@ class ConfigServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this); // Инициализация моков
-        configService = new ConfigService();
-        configService.setProperties(properties);
+        configUtil = new ConfigUtil();
+        configUtil.setProperties(properties);
     }
 
     /**
@@ -47,7 +48,7 @@ class ConfigServiceTest {
         when(properties.getProperty(key)).thenReturn(expectedValue);
 
         // Act
-        String actualValue = configService.getProperty(key);
+        String actualValue = configUtil.getProperty(key);
 
         // Assert
         assertEquals(expectedValue, actualValue);
@@ -68,10 +69,10 @@ class ConfigServiceTest {
         when(properties.getProperty(any())).thenReturn("testValue");
 
         // Act
-        ConfigService configServiceWithException = new ConfigService();
+        ConfigUtil configUtilWithException = new ConfigUtil();
 
         // Assert
         // Убедимся, что свойство properties осталось пустым
-        assertEquals(null, configServiceWithException.getProperty("testKey"));
+        assertEquals(null, configUtilWithException.getProperty("testKey"));
     }
 }

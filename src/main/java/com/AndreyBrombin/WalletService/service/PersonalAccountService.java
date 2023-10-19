@@ -112,7 +112,7 @@ public class PersonalAccountService {
     /**
      * Получение тсписка всех транзакций хранящихся в "базе".
      */
-    public List<TransactionModel> getAllTransactions() {
-        return dependencyContainer.getTransactionRepository().getAllTransactions();
+    public List<TransactionModel> getAllTransactionsByAccount(BigInteger accountId) {
+        return dependencyContainer.getTransactionRepository().getTransactionsByAccount(accountId);
     }
 }

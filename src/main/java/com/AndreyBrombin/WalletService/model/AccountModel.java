@@ -10,9 +10,8 @@ import java.math.BigInteger;
  * Этот класс содержит информацию о пользователе, такую как имя, фамилия, логин и пароль.
  * Он также связан с кошельком пользователя, который используется для хранения средств.
  */
-public class AccountModel implements Serializable {
+public class AccountModel{
     private static BigInteger accountCounter = BigInteger.ZERO;
-    private static final long serialVersionUID = 1L;
     private BigInteger id;
     private String name;
     private String surname;
@@ -27,15 +26,15 @@ public class AccountModel implements Serializable {
      * @param surname         Фамилия пользователя.
      * @param login           Логин пользователя.
      * @param password        Пароль пользователя.
-     * @param walletRepository Репозиторий кошельков, используемый для создания кошелька для этого аккаунта.
+     * @param walletId        Id кошелька пользователя.
      */
-    public AccountModel(String name, String surname, String login, String password, WalletRepository walletRepository) {
-        this.id = generateAccountId();
+    public AccountModel(BigInteger id, String name, String surname, String login, String password, BigInteger walletId) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.login = login;
         this.password = password;
-        this.walletId = createWallet(walletRepository);
+        this.walletId = walletId;
     }
 
     /**
@@ -99,20 +98,9 @@ public class AccountModel implements Serializable {
      * @return Уникальный идентификатор созданного кошелька.
      */
     public BigInteger createWallet(WalletRepository walletRepository) {
-        WalletModel wallet = new WalletModel(this.id);
+        WalletModel wallet = new WalletModel(walletRepository.loadLastIdFromDatabase().add(BigInteger.ONE), this.id);
         walletRepository.addWallet(wallet);
         return wallet.getId();
-    }
-
-    /**
-     * Генерирует уникальный идентификатор аккаунта на основе счетчика аккаунтов.
-     *
-     * @return Уникальный идентификатор аккаунта.
-     */
-    public static BigInteger generateAccountId() {
-        // Увеличивает счетчик аккаунтов для создания нового уникального ID
-        accountCounter = accountCounter.add(BigInteger.ONE);
-        return accountCounter;
     }
 
     /**
@@ -135,11 +123,20 @@ public class AccountModel implements Serializable {
         return password != null ? password.equals(that.password) : that.password == null;
     }
     /**
-    * Получить уникальный идентификатор аккаунта, который используется для операций с кошельком.
+    * Получить идентификатор кошелька.
     *
-    * @return Id владельца аккаунта
+    * @return Id кошелька.
      */
     public BigInteger getWalletOwnerId() {
         return id;
+    }
+    /**
+     * Получить уникальный идентификатор аккаунта, который используется для операций с кошельком.
+     *
+     * @return Id сгенерированный для аккаунта.
+     */
+    public static synchronized BigInteger generateUniqueId() {
+        accountCounter = accountCounter.add(BigInteger.ONE);
+        return accountCounter;
     }
 }
