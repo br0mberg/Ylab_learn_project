@@ -6,10 +6,7 @@ import com.AndreyBrombin.WalletService.model.WalletModel;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -157,21 +154,22 @@ public class WalletRepository {
     }
 
     /**
-     * Загружает последний Id из базы данных.
+     * Генерирует walletId с помощью Sequence.
      */
-    public BigInteger loadLastIdFromDatabase() {
-        String selectMaxIdSQL = "SELECT MAX(id) FROM wallets_table";
+    public BigInteger generateTransactionIdFromSequence() {
+        BigInteger walletId = null;
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(selectMaxIdSQL);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery("SELECT nextval('wallet_id_sequence')");
             if (resultSet.next()) {
-                BigInteger maxId = BigInteger.valueOf(resultSet.getLong(1));
-                return maxId;
+                walletId = BigInteger.valueOf(resultSet.getLong(1));
+            } else {
+                CustomLogger.logInfo("Ошибка в работе sequence");
             }
         } catch (SQLException e) {
-            CustomLogger.logError("Ошибка при получении максимального id из базы данных.", e);
+            CustomLogger.logError("Ошибка при генерации accountId из Sequence", e);
         }
 
-        return BigInteger.ZERO;
+        return walletId;
     }
 }

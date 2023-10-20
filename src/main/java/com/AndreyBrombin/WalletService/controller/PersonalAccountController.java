@@ -61,7 +61,7 @@ public class PersonalAccountController {
                         handleBalance(outputHandler, configUtil, personalAccountService);
                         break;
                     case 5:
-                        printAllTransactions(personalAccountService, currentAccount.getId());
+                        printAllTransactions(personalAccountService, currentAccount.getWalletId());
                         break;
                     case 6:
                         dependencyContainer.getAuditService().logLogout(currentAccount.getLogin());

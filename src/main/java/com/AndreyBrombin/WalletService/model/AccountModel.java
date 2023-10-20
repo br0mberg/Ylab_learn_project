@@ -98,7 +98,7 @@ public class AccountModel{
      * @return Уникальный идентификатор созданного кошелька.
      */
     public BigInteger createWallet(WalletRepository walletRepository) {
-        WalletModel wallet = new WalletModel(walletRepository.loadLastIdFromDatabase().add(BigInteger.ONE), this.id);
+        WalletModel wallet = new WalletModel(walletRepository.generateTransactionIdFromSequence(), this.id);
         walletRepository.addWallet(wallet);
         return wallet.getId();
     }

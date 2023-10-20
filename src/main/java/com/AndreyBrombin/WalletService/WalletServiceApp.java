@@ -23,7 +23,8 @@ public class WalletServiceApp {
     public static void main(String[] args) {
         Connection connection = ConnectionManager.open();
         try {
-            Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+            Database database = DatabaseFactory.getInstance().
+                    findCorrectDatabaseImplementation(new JdbcConnection(connection));
             Liquibase liquibase = new Liquibase(
                     "db/changelog/changelog.xml",
                     new ClassLoaderResourceAccessor(), database);
@@ -31,7 +32,7 @@ public class WalletServiceApp {
         } catch(DatabaseException e) {
             CustomLogger.logError("Ошибка подключения бд в Liquibase", e);
         } catch (LiquibaseException e) {
-            throw new RuntimeException(e);
+            CustomLogger.logError("Ошибка миграции бд в Liquibase", e);
         }
 
         DependencyContainer container = new DependencyContainer();

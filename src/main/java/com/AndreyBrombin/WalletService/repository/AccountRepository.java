@@ -15,32 +15,12 @@ import java.sql.*;
  */
 public class AccountRepository {
     private Connection connection;
-    private BigInteger currentId;
 
     /**
      * Создает новый экземпляр репозитория аккаунтов.
      */
     public AccountRepository() {
         this.connection = ConnectionManager.open();
-        this.currentId = loadLastIdFromDatabase().add(BigInteger.ONE);
-    }
-    /**
-     * Загружает последний Id из базы данных.
-     */
-    private BigInteger loadLastIdFromDatabase() {
-        String selectMaxIdSQL = "SELECT MAX(id) FROM accounts_table";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(selectMaxIdSQL);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (resultSet.next()) {
-                BigInteger maxId = BigInteger.valueOf(resultSet.getLong(1));
-                return maxId;
-            }
-        } catch (SQLException e) {
-            CustomLogger.logError("Ошибка при получении максимального id из базы данных.", e);
-        }
-
-        return BigInteger.ZERO;
     }
 
     /**
@@ -55,9 +35,9 @@ public class AccountRepository {
      * @return true, если регистрация прошла успешно, в противном случае - false.
      */
     public boolean register(String name, String surname, String login, String password, WalletRepository walletRepository) {
-        BigInteger walletId = this.currentId;
-        BigInteger accountId = this.currentId;
-        this.currentId = this.currentId.add(BigInteger.ONE);
+        BigInteger walletId = walletRepository.generateTransactionIdFromSequence();
+        BigInteger accountId = generateAccountIdFromSequence();
+
         String insertAccountSQL = "INSERT INTO accounts_table " +
                 "(id, name, surname, login, password, wallet_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
@@ -73,7 +53,7 @@ public class AccountRepository {
             int affectedRows = preparedStatement.executeUpdate();
 
             if (affectedRows > 0) {
-                WalletModel wallet = new WalletModel(walletRepository.loadLastIdFromDatabase().add(BigInteger.ONE), accountId);
+                WalletModel wallet = new WalletModel(walletId, accountId);
                 walletRepository.addWallet(wallet);
                 connection.commit();
                 return true;
@@ -87,6 +67,25 @@ public class AccountRepository {
             }
         }
         return false;
+    }
+    /**
+     * Генерирует accountId с помощью Sequence.
+     */
+    private BigInteger generateAccountIdFromSequence() {
+        BigInteger accountId = null;
+
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery("SELECT nextval('account_id_sequence')");
+            if (resultSet.next()) {
+                accountId = BigInteger.valueOf(resultSet.getLong(1));
+            } else {
+                CustomLogger.logInfo("Ошибка в работе sequence");
+            }
+        } catch (SQLException e) {
+            CustomLogger.logError("Ошибка при генерации accountId из Sequence", e);
+        }
+
+        return accountId;
     }
 
     /**

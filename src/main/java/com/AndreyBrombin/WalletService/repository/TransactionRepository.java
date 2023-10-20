@@ -36,7 +36,7 @@ public class TransactionRepository {
         String insertTransactionSQL = "INSERT INTO transactions_table (id, sender_account_id, receiver_account_id, amount, transaction_date, transaction_type) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertTransactionSQL)) {
-            preparedStatement.setObject(1, transaction.getId());
+            preparedStatement.setObject(1, generateTransactionIdFromSequence());
             preparedStatement.setObject(2, transaction.getSenderAccountId());
             preparedStatement.setObject(3, transaction.getReceiverAccountId());
             preparedStatement.setBigDecimal(4, transaction.getAmount());
@@ -64,65 +64,38 @@ public class TransactionRepository {
     }
 
     /**
-     * Получает последний id в базе данных.
+     * Генерирует transactionId с помощью Sequence.
      */
-    public BigInteger loadLastIdFromDatabase() {
-        String selectMaxIdSQL = "SELECT MAX(id) FROM transactions_table";
+    public BigInteger generateTransactionIdFromSequence() {
+        BigInteger transactionId = null;
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(selectMaxIdSQL);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery("SELECT nextval('transaction_id_sequence')");
             if (resultSet.next()) {
-                BigInteger maxId = BigInteger.valueOf(resultSet.getLong(1));
-                return maxId;
+                transactionId = BigInteger.valueOf(resultSet.getLong(1));
+            } else {
+                CustomLogger.logInfo("Ошибка в работе sequence");
             }
         } catch (SQLException e) {
-            CustomLogger.logError("Ошибка при получении максимального id из базы данных.", e);
+            CustomLogger.logError("Ошибка при генерации accountId из Sequence", e);
         }
 
-        return BigInteger.ZERO;
-    }
-
-    /**
-     * Возвращает список всех существующих транзакций.
-     *
-     * @return Список всех транзакций.
-     */
-    public List<TransactionModel> getAllTransactions() {
-        List<TransactionModel> transactions = new ArrayList<>();
-        String selectTransactionsSQL = "SELECT * FROM transactions_table";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(selectTransactionsSQL);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            while (resultSet.next()) {
-                BigInteger id = BigInteger.valueOf(resultSet.getLong("id"));
-                BigInteger senderAccountId = BigInteger.valueOf(resultSet.getLong("sender_account_id"));
-                BigInteger receiverAccountId = BigInteger.valueOf(resultSet.getLong("receiver_account_id"));
-                BigDecimal amount = resultSet.getBigDecimal("amount");
-                Date date = resultSet.getDate("transaction_date");
-                TransactionType transactionType = TransactionType.fromString(resultSet.getString("transaction_type"));
-                TransactionModel transaction = new TransactionModel(id, senderAccountId, receiverAccountId, amount, date, transactionType);
-                transactions.add(transaction);
-            }
-        } catch (SQLException e) {
-            CustomLogger.logError("Ошибка при получении списка транзакций.", e);
-        }
-
-        return transactions;
+        return transactionId;
     }
 
     /**
      * Возвращает список всех транзакций, связанных с указанным аккаунтом.
      *
-     * @param accountId Идентификатор аккаунта, для которого нужно получить транзакции.
+     * @param accountWalletId Идентификатор аккаунта, для которого нужно получить транзакции.
      * @return Список транзакций, связанных с указанным аккаунтом.
      */
-    public List<TransactionModel> getTransactionsByAccount(BigInteger accountId) {
+    public List<TransactionModel> getTransactionsByAccount(BigInteger accountWalletId) {
         List<TransactionModel> transactions = new ArrayList<>();
         String selectTransactionsSQL = "SELECT * FROM transactions_table WHERE sender_account_id = ? OR receiver_account_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectTransactionsSQL)) {
-            preparedStatement.setObject(1, accountId);
-            preparedStatement.setObject(2, accountId);
+            preparedStatement.setObject(1, accountWalletId);
+            preparedStatement.setObject(2, accountWalletId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -132,13 +105,16 @@ public class TransactionRepository {
                     BigDecimal amount = resultSet.getBigDecimal("amount");
                     Date date = resultSet.getDate("transaction_date");
 
-                    TransactionType transactionType;
-                    if (senderAccountId.equals(accountId)) {
-                        transactionType = TransactionType.OUTGOING_TRANSFER;
-                    } else if (receiverAccountId.equals(accountId)) {
-                        transactionType = TransactionType.INCOMING_TRANSFER;
-                    } else {
-                        transactionType = TransactionType.UNNAMED;
+                    TransactionType transactionType = TransactionType.
+                            fromString(resultSet.getString("transaction_type"));
+                    if (!(senderAccountId.equals(accountWalletId) && receiverAccountId.equals(accountWalletId))) {
+                        if (senderAccountId.equals(accountWalletId)) {
+                            transactionType = TransactionType.OUTGOING_TRANSFER;
+                        } else if (receiverAccountId.equals(accountWalletId)) {
+                            transactionType = TransactionType.INCOMING_TRANSFER;
+                        } else {
+                            transactionType = TransactionType.UNNAMED;
+                        }
                     }
 
                     TransactionModel transaction = new TransactionModel(id, senderAccountId, receiverAccountId, amount, date, transactionType);

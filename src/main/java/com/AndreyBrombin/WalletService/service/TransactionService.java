@@ -52,7 +52,7 @@ public class TransactionService {
             walletRepository.updateWalletBalance(wallet);
 
             TransactionModel depositTransaction = new TransactionModel(
-                    transactionRepository.loadLastIdFromDatabase().add(BigInteger.ONE),
+                    transactionRepository.generateTransactionIdFromSequence(),
                     wallet.getId(),
                     wallet.getId(),
                     amount,
@@ -94,7 +94,7 @@ public class TransactionService {
             walletRepository.updateWalletBalance(wallet);
 
             TransactionModel withdrawalTransaction = new TransactionModel(
-                    transactionRepository.loadLastIdFromDatabase().add(BigInteger.ONE),
+                    transactionRepository.generateTransactionIdFromSequence(),
                     wallet.getId(),
                     wallet.getId(),
                     amount,
@@ -146,9 +146,8 @@ public class TransactionService {
             // Обновляем информацию о кошельках в репозитории
             walletRepository.updateWalletBalance(senderWallet);
             walletRepository.updateWalletBalance(receiverWallet);
-            BigInteger transactionId = transactionRepository.loadLastIdFromDatabase().add(BigInteger.ONE);
             TransactionModel senderTransaction = new TransactionModel(
-                    transactionId,
+                    transactionRepository.generateTransactionIdFromSequence(),
                     senderWallet.getId(),
                     receiverWallet.getId(),
                     amount,
@@ -169,14 +168,5 @@ public class TransactionService {
             CustomLogger.logError("Error during transfer operation: ", e);
             return false;
         }
-    }
-
-    /**
-     * Получение списка всех транзакций.
-     *
-     * @return Список всех транзакций.
-     */
-    public List<TransactionModel> getAllTransactions() {
-        return transactionRepository.getAllTransactions();
     }
 }

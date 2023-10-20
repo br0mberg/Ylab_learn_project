@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.10.xsd">
 
     <changeSet id="2" author="BrombinAndrey">
-        <createTable tableName="transactions_table">
+        <createTable schemaName="entities_schema" tableName="transactions_table">
             <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -25,5 +25,14 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+    <changeSet id="create-sequence-transaction" author="BrombinAndrey">
+        <createSequence
+                sequenceName="transaction_id_sequence"
+                incrementBy="1"
+                startValue="1"
+                cycle="false"
+                schemaName="entities_schema"
+        />
     </changeSet>
 </databaseChangeLog>
