@@ -1,13 +1,9 @@
-package com.AndreyBrombin.WalletService.service.Authorization;
+package com.AndreyBrombin.WalletService.service.AuthorizationServices;
 
-import com.AndreyBrombin.WalletService.model.AccountModel;
 import com.AndreyBrombin.WalletService.repository.RegisterRepository;
 import com.AndreyBrombin.WalletService.repository.WalletRepository;
 
-import java.math.BigInteger;
 import java.sql.SQLException;
-
-import static com.AndreyBrombin.WalletService.model.AccountModel.generateUniqueId;
 
 /**
  * Сервис для регистрации новых учетных записей.

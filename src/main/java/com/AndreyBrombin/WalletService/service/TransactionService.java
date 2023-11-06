@@ -1,6 +1,6 @@
 package com.AndreyBrombin.WalletService.service;
 
-import com.AndreyBrombin.WalletService.Logger.CustomLogger;
+import com.AndreyBrombin.WalletService.infrastructure.logger.CustomLogger;
 import com.AndreyBrombin.WalletService.model.TransactionModel;
 import com.AndreyBrombin.WalletService.model.TransactionType;
 import com.AndreyBrombin.WalletService.model.WalletModel;
@@ -10,7 +10,6 @@ import com.AndreyBrombin.WalletService.repository.WalletRepository;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Сервис для управления транзакциями и операциями над кошельками.

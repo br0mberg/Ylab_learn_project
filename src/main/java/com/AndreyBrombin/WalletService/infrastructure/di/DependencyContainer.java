@@ -1,12 +1,12 @@
-package com.AndreyBrombin.WalletService.infrastructure;
+package com.AndreyBrombin.WalletService.infrastructure.di;
 
 import com.AndreyBrombin.WalletService.controller.in.InputHandler;
 import com.AndreyBrombin.WalletService.controller.out.OutputHandler;
 import com.AndreyBrombin.WalletService.repository.*;
 import com.AndreyBrombin.WalletService.service.AuditService;
-import com.AndreyBrombin.WalletService.service.Authorization.LoginService;
-import com.AndreyBrombin.WalletService.service.Authorization.RegistrationService;
-import com.AndreyBrombin.WalletService.util.ConfigUtil;
+import com.AndreyBrombin.WalletService.service.AuthorizationServices.LoginService;
+import com.AndreyBrombin.WalletService.service.AuthorizationServices.RegistrationService;
+import com.AndreyBrombin.WalletService.infrastructure.util.ConfigUtil;
 import com.AndreyBrombin.WalletService.service.PersonalAccountService;
 import com.AndreyBrombin.WalletService.service.TransactionService;
 

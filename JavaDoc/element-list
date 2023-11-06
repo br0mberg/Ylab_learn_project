@@ -6,4 +6,4 @@ com.AndreyBrombin.WalletService.infrastructure
 com.AndreyBrombin.WalletService.model
 com.AndreyBrombin.WalletService.repository
 com.AndreyBrombin.WalletService.service
-com.AndreyBrombin.WalletService.service.Authorization
+com.AndreyBrombin.WalletService.service.AuthorizationServices

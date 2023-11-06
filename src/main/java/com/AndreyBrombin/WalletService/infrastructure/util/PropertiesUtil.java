@@ -1,6 +1,6 @@
-package com.AndreyBrombin.WalletService.util;
+package com.AndreyBrombin.WalletService.infrastructure.util;
 
-import com.AndreyBrombin.WalletService.Logger.CustomLogger;
+import com.AndreyBrombin.WalletService.infrastructure.logger.CustomLogger;
 
 import java.io.IOException;
 import java.io.InputStream;

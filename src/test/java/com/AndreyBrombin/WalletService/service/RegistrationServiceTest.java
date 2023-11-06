@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 import com.AndreyBrombin.WalletService.repository.AccountRepository;
 import com.AndreyBrombin.WalletService.repository.RegisterRepository;
 import com.AndreyBrombin.WalletService.repository.WalletRepository;
-import com.AndreyBrombin.WalletService.service.Authorization.RegistrationService;
+import com.AndreyBrombin.WalletService.service.AuthorizationServices.RegistrationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

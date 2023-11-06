@@ -1,6 +1,6 @@
-package com.AndreyBrombin.WalletService.Logger;
+package com.AndreyBrombin.WalletService.infrastructure.logger;
 
-import com.AndreyBrombin.WalletService.infrastructure.DependencyContainer;
+import com.AndreyBrombin.WalletService.infrastructure.di.DependencyContainer;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;

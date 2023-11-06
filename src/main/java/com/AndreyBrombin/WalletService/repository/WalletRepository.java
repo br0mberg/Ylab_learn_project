@@ -1,6 +1,6 @@
 package com.AndreyBrombin.WalletService.repository;
 
-import com.AndreyBrombin.WalletService.Logger.CustomLogger;
+import com.AndreyBrombin.WalletService.infrastructure.logger.CustomLogger;
 import com.AndreyBrombin.WalletService.jdbc.ConnectionManager;
 import com.AndreyBrombin.WalletService.model.WalletModel;
 
@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -31,7 +30,7 @@ public class WalletRepository {
      * @param wallet Новый кошелек для добавления.
      */
     public void addWallet(WalletModel wallet) {
-        String insertWalletSQL = "INSERT INTO wallets_table (id, owner_id, wallet_name, balance) VALUES (?, ?, ?, ?)";
+        String insertWalletSQL = "INSERT INTO entities_schema.wallets_table (id, owner_id, wallet_name, balance) VALUES (?, ?, ?, ?)";
 
         try {
             connection.setAutoCommit(false);
@@ -63,7 +62,7 @@ public class WalletRepository {
      */
     public List<WalletModel> getAllWallets() {
         List<WalletModel> wallets = new ArrayList<>();
-        String selectWalletsSQL = "SELECT * FROM wallets_table";
+        String selectWalletsSQL = "SELECT * FROM entities_schema.wallets_table";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectWalletsSQL);
              ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -88,7 +87,7 @@ public class WalletRepository {
      * @return true, если обновление успешно выполнено, иначе false.
      */
     public boolean updateWalletBalance(WalletModel updatedWallet) {
-        String updateWalletSQL = "UPDATE wallets_table SET balance = ? WHERE owner_id = ?";
+        String updateWalletSQL = "UPDATE entities_schema.wallets_table SET balance = ? WHERE owner_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(updateWalletSQL)) {
             preparedStatement.setBigDecimal(1, updatedWallet.getBalance());
@@ -119,7 +118,7 @@ public class WalletRepository {
      * @return Объект кошелька, соответствующий указанному ownerId, или null, если кошелек не найден.
      */
     public WalletModel getWalletById(BigInteger ownerId) {
-        String selectWalletSQL = "SELECT * FROM wallets_table WHERE owner_id = ?";
+        String selectWalletSQL = "SELECT * FROM entities_schema.wallets_table WHERE owner_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectWalletSQL)) {
             preparedStatement.setObject(1, ownerId);
@@ -156,11 +155,11 @@ public class WalletRepository {
     /**
      * Генерирует walletId с помощью Sequence.
      */
-    public BigInteger generateTransactionIdFromSequence() {
+    public BigInteger generateWalletIdFromSequence() {
         BigInteger walletId = null;
 
         try (Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery("SELECT nextval('wallet_id_sequence')");
+            ResultSet resultSet = statement.executeQuery("SELECT nextval('entities_schema.wallet_id_sequence')");
             if (resultSet.next()) {
                 walletId = BigInteger.valueOf(resultSet.getLong(1));
             } else {

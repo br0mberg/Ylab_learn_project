@@ -1,6 +1,6 @@
 package com.AndreyBrombin.WalletService.repository;
 
-import com.AndreyBrombin.WalletService.Logger.CustomLogger;
+import com.AndreyBrombin.WalletService.infrastructure.logger.CustomLogger;
 import com.AndreyBrombin.WalletService.jdbc.ConnectionManager;
 import com.AndreyBrombin.WalletService.model.TransactionModel;
 import com.AndreyBrombin.WalletService.model.TransactionType;
@@ -33,7 +33,7 @@ public class TransactionRepository {
      * @return true, если транзакция была успешно добавлена, в противном случае - false.
      */
     public boolean addTransaction(TransactionModel transaction) {
-        String insertTransactionSQL = "INSERT INTO transactions_table (id, sender_account_id, receiver_account_id, amount, transaction_date, transaction_type) VALUES (?, ?, ?, ?, ?, ?)";
+        String insertTransactionSQL = "INSERT INTO entities_schema.transactions_table (id, sender_account_id, receiver_account_id, amount, transaction_date, transaction_type) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertTransactionSQL)) {
             preparedStatement.setObject(1, generateTransactionIdFromSequence());
@@ -70,7 +70,7 @@ public class TransactionRepository {
         BigInteger transactionId = null;
 
         try (Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery("SELECT nextval('transaction_id_sequence')");
+            ResultSet resultSet = statement.executeQuery("SELECT nextval('entities_schema.transaction_id_sequence')");
             if (resultSet.next()) {
                 transactionId = BigInteger.valueOf(resultSet.getLong(1));
             } else {
@@ -91,7 +91,7 @@ public class TransactionRepository {
      */
     public List<TransactionModel> getTransactionsByAccount(BigInteger accountWalletId) {
         List<TransactionModel> transactions = new ArrayList<>();
-        String selectTransactionsSQL = "SELECT * FROM transactions_table WHERE sender_account_id = ? OR receiver_account_id = ?";
+        String selectTransactionsSQL = "SELECT * FROM entities_schema.transactions_table WHERE sender_account_id = ? OR receiver_account_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectTransactionsSQL)) {
             preparedStatement.setObject(1, accountWalletId);
@@ -134,7 +134,7 @@ public class TransactionRepository {
      * @return true, если транзакция с указанным идентификатором существует, в противном случае - false.
      */
     public boolean doesTransactionExist(BigInteger transactionId) {
-        String selectTransactionSQL = "SELECT COUNT(*) FROM transactions_table WHERE id = ?";
+        String selectTransactionSQL = "SELECT COUNT(*) FROM entities_schema.transactions_table WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectTransactionSQL)) {
             preparedStatement.setObject(1, transactionId);

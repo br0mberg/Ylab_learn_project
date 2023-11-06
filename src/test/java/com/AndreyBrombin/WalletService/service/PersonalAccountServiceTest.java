@@ -2,7 +2,7 @@ package com.AndreyBrombin.WalletService.service;
 
 import com.AndreyBrombin.WalletService.controller.in.InputHandler;
 import com.AndreyBrombin.WalletService.controller.out.OutputHandler;
-import com.AndreyBrombin.WalletService.infrastructure.DependencyContainer;
+import com.AndreyBrombin.WalletService.infrastructure.di.DependencyContainer;
 import com.AndreyBrombin.WalletService.model.AccountModel;
 import com.AndreyBrombin.WalletService.repository.AccountRepository;
 import com.AndreyBrombin.WalletService.repository.WalletRepository;

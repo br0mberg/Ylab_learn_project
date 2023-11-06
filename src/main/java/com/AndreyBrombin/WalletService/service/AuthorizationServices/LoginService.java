@@ -1,4 +1,4 @@
-package com.AndreyBrombin.WalletService.service.Authorization;
+package com.AndreyBrombin.WalletService.service.AuthorizationServices;
 
 import com.AndreyBrombin.WalletService.model.AccountModel;
 import com.AndreyBrombin.WalletService.repository.AccountRepository;

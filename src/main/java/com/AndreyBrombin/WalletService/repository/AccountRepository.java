@@ -1,6 +1,6 @@
 package com.AndreyBrombin.WalletService.repository;
 
-import com.AndreyBrombin.WalletService.Logger.CustomLogger;
+import com.AndreyBrombin.WalletService.infrastructure.logger.CustomLogger;
 import com.AndreyBrombin.WalletService.jdbc.ConnectionManager;
 import com.AndreyBrombin.WalletService.model.AccountModel;
 import com.AndreyBrombin.WalletService.model.WalletModel;
@@ -35,10 +35,10 @@ public class AccountRepository {
      * @return true, если регистрация прошла успешно, в противном случае - false.
      */
     public boolean register(String name, String surname, String login, String password, WalletRepository walletRepository) {
-        BigInteger walletId = walletRepository.generateTransactionIdFromSequence();
+        BigInteger walletId = walletRepository.generateWalletIdFromSequence();
         BigInteger accountId = generateAccountIdFromSequence();
 
-        String insertAccountSQL = "INSERT INTO accounts_table " +
+        String insertAccountSQL = "INSERT INTO entities_schema.accounts_table " +
                 "(id, name, surname, login, password, wallet_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -75,7 +75,7 @@ public class AccountRepository {
         BigInteger accountId = null;
 
         try (Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery("SELECT nextval('account_id_sequence')");
+            ResultSet resultSet = statement.executeQuery("SELECT nextval('entities_schema.account_id_sequence')");
             if (resultSet.next()) {
                 accountId = BigInteger.valueOf(resultSet.getLong(1));
             } else {
@@ -95,7 +95,7 @@ public class AccountRepository {
      * @return Объект аккаунта, соответствующий указанному логину, или null, если аккаунт не найден.
      */
     public AccountModel getAccountByLogin(String login) {
-        String selectAccountSQL = "SELECT * FROM accounts_table WHERE login = ?";
+        String selectAccountSQL = "SELECT * FROM entities_schema.accounts_table WHERE login = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectAccountSQL)) {
             preparedStatement.setString(1, login);

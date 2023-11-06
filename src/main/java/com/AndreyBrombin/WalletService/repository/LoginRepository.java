@@ -1,11 +1,7 @@
 package com.AndreyBrombin.WalletService.repository;
 
-import com.AndreyBrombin.WalletService.Logger.CustomLogger;
+import com.AndreyBrombin.WalletService.infrastructure.logger.CustomLogger;
 import com.AndreyBrombin.WalletService.model.AccountModel;
-
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Репозиторий, отвечающий за аутентификацию пользователей по логину и паролю.

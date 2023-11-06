@@ -1,12 +1,12 @@
 package com.AndreyBrombin.WalletService.controller;
 
-import com.AndreyBrombin.WalletService.Logger.CustomLogger;
+import com.AndreyBrombin.WalletService.infrastructure.logger.CustomLogger;
 import com.AndreyBrombin.WalletService.controller.in.InputHandler;
 import com.AndreyBrombin.WalletService.controller.out.OutputHandler;
-import com.AndreyBrombin.WalletService.infrastructure.DependencyContainer;
+import com.AndreyBrombin.WalletService.infrastructure.di.DependencyContainer;
 import com.AndreyBrombin.WalletService.model.AccountModel;
 import com.AndreyBrombin.WalletService.model.TransactionModel;
-import com.AndreyBrombin.WalletService.util.ConfigUtil;
+import com.AndreyBrombin.WalletService.infrastructure.util.ConfigUtil;
 import com.AndreyBrombin.WalletService.service.PersonalAccountService;
 
 import java.math.BigInteger;
