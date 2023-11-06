@@ -40,5 +40,6 @@ public class WalletServiceApp {
         DependencyContainer container = new DependencyContainer();
         MainMenuController mainMenuController = new MainMenuController(container);
         mainMenuController.start();
+
     }
 }
