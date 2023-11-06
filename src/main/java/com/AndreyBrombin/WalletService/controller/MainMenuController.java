@@ -1,13 +1,13 @@
 package com.AndreyBrombin.WalletService.controller;
 
-import com.AndreyBrombin.WalletService.Logger.CustomLogger;
+import com.AndreyBrombin.WalletService.infrastructure.logger.CustomLogger;
 import com.AndreyBrombin.WalletService.controller.in.InputHandler;
 import com.AndreyBrombin.WalletService.controller.out.OutputHandler;
-import com.AndreyBrombin.WalletService.infrastructure.DependencyContainer;
+import com.AndreyBrombin.WalletService.infrastructure.di.DependencyContainer;
 import com.AndreyBrombin.WalletService.repository.AccountRepository;
-import com.AndreyBrombin.WalletService.service.Authorization.LoginService;
-import com.AndreyBrombin.WalletService.service.Authorization.RegistrationService;
-import com.AndreyBrombin.WalletService.util.ConfigUtil;
+import com.AndreyBrombin.WalletService.service.AuthorizationServices.LoginService;
+import com.AndreyBrombin.WalletService.service.AuthorizationServices.RegistrationService;
+import com.AndreyBrombin.WalletService.infrastructure.util.ConfigUtil;
 
 /**
  * Класс, управляющий главным меню приложения.

@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class DependencyContainer" class="title">Class DependencyContainer</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">com.AndreyBrombin.WalletService.infrastructure.DependencyContainer</div>
+<div class="inheritance">com.AndreyBrombin.WalletService.infrastructure.di.DependencyContainer</div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
@@ -144,7 +144,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Получить объект репозитория входа в систему.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../service/Authorization/LoginService.html" title="class in com.AndreyBrombin.WalletService.service.Authorization">LoginService</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../service/Authorization/LoginService.html" title="class in com.AndreyBrombin.WalletService.service.AuthorizationServices">LoginService</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLoginService()" class="member-name-link">getLoginService</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Получить объект службы входа в систему.</div>
@@ -164,7 +164,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Получить объект репозитория регистрации.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../service/Authorization/RegistrationService.html" title="class in com.AndreyBrombin.WalletService.service.Authorization">RegistrationService</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../service/Authorization/RegistrationService.html" title="class in com.AndreyBrombin.WalletService.service.AuthorizationServices">RegistrationService</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRegistrationService()" class="member-name-link">getRegistrationService</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Получить объект службы регистрации.</div>
@@ -200,7 +200,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Установить объект обработчика ввода.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLoginService(com.AndreyBrombin.WalletService.service.Authorization.LoginService)" class="member-name-link">setLoginService</a><wbr>(<a href="../service/Authorization/LoginService.html" title="class in com.AndreyBrombin.WalletService.service.Authorization">LoginService</a>&nbsp;loginService)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLoginService(com.AndreyBrombin.WalletService.service.Authorization.LoginService)" class="member-name-link">setLoginService</a><wbr>(<a href="../service/Authorization/LoginService.html" title="class in com.AndreyBrombin.WalletService.service.AuthorizationServices">LoginService</a>&nbsp;loginService)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Установить объект службы входа в систему.</div>
 </div>
@@ -215,7 +215,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Установить объект службы управления персональным счетом.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRegistrationService(com.AndreyBrombin.WalletService.service.Authorization.RegistrationService)" class="member-name-link">setRegistrationService</a><wbr>(<a href="../service/Authorization/RegistrationService.html" title="class in com.AndreyBrombin.WalletService.service.Authorization">RegistrationService</a>&nbsp;registrationService)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRegistrationService(com.AndreyBrombin.WalletService.service.Authorization.RegistrationService)" class="member-name-link">setRegistrationService</a><wbr>(<a href="../service/Authorization/RegistrationService.html" title="class in com.AndreyBrombin.WalletService.service.AuthorizationServices">RegistrationService</a>&nbsp;registrationService)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Установить объект службы регистрации.</div>
 </div>
@@ -297,7 +297,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLoginService()">
 <h3>getLoginService</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../service/Authorization/LoginService.html" title="class in com.AndreyBrombin.WalletService.service.Authorization">LoginService</a></span>&nbsp;<span class="element-name">getLoginService</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../service/Authorization/LoginService.html" title="class in com.AndreyBrombin.WalletService.service.AuthorizationServices">LoginService</a></span>&nbsp;<span class="element-name">getLoginService</span>()</div>
 <div class="block">Получить объект службы входа в систему.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -308,7 +308,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRegistrationService()">
 <h3>getRegistrationService</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../service/Authorization/RegistrationService.html" title="class in com.AndreyBrombin.WalletService.service.Authorization">RegistrationService</a></span>&nbsp;<span class="element-name">getRegistrationService</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../service/Authorization/RegistrationService.html" title="class in com.AndreyBrombin.WalletService.service.AuthorizationServices">RegistrationService</a></span>&nbsp;<span class="element-name">getRegistrationService</span>()</div>
 <div class="block">Получить объект службы регистрации.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -396,7 +396,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setLoginService(com.AndreyBrombin.WalletService.service.Authorization.LoginService)">
 <h3>setLoginService</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setLoginService</span><wbr><span class="parameters">(<a href="../service/Authorization/LoginService.html" title="class in com.AndreyBrombin.WalletService.service.Authorization">LoginService</a>&nbsp;loginService)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setLoginService</span><wbr><span class="parameters">(<a href="../service/Authorization/LoginService.html" title="class in com.AndreyBrombin.WalletService.service.AuthorizationServices">LoginService</a>&nbsp;loginService)</span></div>
 <div class="block">Установить объект службы входа в систему.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -407,7 +407,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setRegistrationService(com.AndreyBrombin.WalletService.service.Authorization.RegistrationService)">
 <h3>setRegistrationService</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setRegistrationService</span><wbr><span class="parameters">(<a href="../service/Authorization/RegistrationService.html" title="class in com.AndreyBrombin.WalletService.service.Authorization">RegistrationService</a>&nbsp;registrationService)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setRegistrationService</span><wbr><span class="parameters">(<a href="../service/Authorization/RegistrationService.html" title="class in com.AndreyBrombin.WalletService.service.AuthorizationServices">RegistrationService</a>&nbsp;registrationService)</span></div>
 <div class="block">Установить объект службы регистрации.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

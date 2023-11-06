@@ -1,7 +1,7 @@
 package com.AndreyBrombin.WalletService.service;
 
 
-import com.AndreyBrombin.WalletService.Logger.CustomLogger;
+import com.AndreyBrombin.WalletService.infrastructure.logger.CustomLogger;
 
 import java.io.FileWriter;
 import java.io.IOException;

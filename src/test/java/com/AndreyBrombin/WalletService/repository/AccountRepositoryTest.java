@@ -1,6 +1,5 @@
 package com.AndreyBrombin.WalletService.repository;
 
-import com.AndreyBrombin.WalletService.infrastructure.DependencyContainer;
 import com.AndreyBrombin.WalletService.model.AccountModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

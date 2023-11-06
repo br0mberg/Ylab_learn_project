@@ -1,6 +1,6 @@
 package com.AndreyBrombin.WalletService.model;
 
-import com.AndreyBrombin.WalletService.Logger.CustomLogger;
+import com.AndreyBrombin.WalletService.infrastructure.logger.CustomLogger;
 
 /**
  * Перечисление, представляющее типы транзакций.

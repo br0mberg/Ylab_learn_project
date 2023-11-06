@@ -1,9 +1,8 @@
 package com.AndreyBrombin.WalletService.jdbc;
 
-import com.AndreyBrombin.WalletService.Logger.CustomLogger;
-import com.AndreyBrombin.WalletService.util.PropertiesUtil;
+import com.AndreyBrombin.WalletService.infrastructure.logger.CustomLogger;
+import com.AndreyBrombin.WalletService.infrastructure.util.PropertiesUtil;
 
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

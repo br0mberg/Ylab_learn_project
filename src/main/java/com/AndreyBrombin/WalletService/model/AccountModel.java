@@ -2,7 +2,6 @@ package com.AndreyBrombin.WalletService.model;
 
 import com.AndreyBrombin.WalletService.repository.WalletRepository;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
@@ -98,7 +97,7 @@ public class AccountModel{
      * @return Уникальный идентификатор созданного кошелька.
      */
     public BigInteger createWallet(WalletRepository walletRepository) {
-        WalletModel wallet = new WalletModel(walletRepository.generateTransactionIdFromSequence(), this.id);
+        WalletModel wallet = new WalletModel(walletRepository.generateWalletIdFromSequence(), this.id);
         walletRepository.addWallet(wallet);
         return wallet.getId();
     }

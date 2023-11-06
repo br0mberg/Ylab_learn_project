@@ -1,6 +1,6 @@
 package com.AndreyBrombin.WalletService.service;
 
-import com.AndreyBrombin.WalletService.util.ConfigUtil;
+import com.AndreyBrombin.WalletService.infrastructure.util.ConfigUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
