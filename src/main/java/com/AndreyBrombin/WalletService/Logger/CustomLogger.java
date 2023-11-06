@@ -18,10 +18,18 @@ public class CustomLogger {
 
     static {
         try {
-            FileHandler fileHandler = new FileHandler(new DependencyContainer().getConfigService().getProperty("path.save.log"));
+            DependencyContainer container = new DependencyContainer();
+            String projectName = container.getConfigService().getProperty("project.name");
+            String logPath = container.getConfigService().getProperty("path.save.log");
+
+            if (projectName == null || logPath == null) {
+                throw new IOException("Unable to retrieve project name or log file path.");
+            }
+
+            FileHandler fileHandler = new FileHandler(logPath);
             fileHandler.setLevel(Level.ALL);
             logger.addHandler(fileHandler);
-        } catch (IOException e) {
+        } catch (IOException | SecurityException e) {
             e.printStackTrace();
         }
     }

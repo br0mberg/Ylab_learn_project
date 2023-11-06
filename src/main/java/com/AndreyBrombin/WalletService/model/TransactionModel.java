@@ -1,6 +1,7 @@
 package com.AndreyBrombin.WalletService.model;
 
-import java.io.Serializable;
+import com.AndreyBrombin.WalletService.repository.TransactionRepository;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
@@ -11,7 +12,7 @@ import java.util.Objects;
  * Этот класс содержит информацию о переводе средств между аккаунтами, включая идентификатор отправителя,
  * идентификатор получателя, сумму, дату транзакции и тип транзакции (например, депозит или снятие средств).
  */
-public class TransactionModel implements Serializable {
+public class TransactionModel {
     private static BigInteger transactionCounter = BigInteger.ZERO;
     private BigInteger id;
 
@@ -26,14 +27,15 @@ public class TransactionModel implements Serializable {
     /**
      * Конструктор класса TransactionModel.
      *
+     * @param id                Идентификатор транзакции.
      * @param senderAccountId   Идентификатор аккаунта отправителя.
      * @param receiverAccountId Идентификатор аккаунта получателя.
      * @param amount           Сумма транзакции.
      * @param transactionDate   Дата транзакции.
      * @param transactionType   Тип транзакции (например, депозит или снятие средств).
      */
-    public TransactionModel(BigInteger senderAccountId, BigInteger receiverAccountId, BigDecimal amount, Date transactionDate, TransactionType transactionType) {
-        this.id = generateTransactionId();
+    public TransactionModel(BigInteger id, BigInteger senderAccountId, BigInteger receiverAccountId, BigDecimal amount, Date transactionDate, TransactionType transactionType) {
+        this.id = id;
         this.senderAccountId = senderAccountId;
         this.receiverAccountId = receiverAccountId;
         this.amount = amount;
@@ -46,9 +48,10 @@ public class TransactionModel implements Serializable {
      * @return Уникальный идентификатор транзакции.
      */
     public static BigInteger generateTransactionId() {
-        // Увеличивает счетчик транзакций для создания нового уникального ID
-        transactionCounter = transactionCounter.add(BigInteger.ONE);
-        return transactionCounter;
+        synchronized (TransactionRepository.class) {
+            transactionCounter = transactionCounter.add(BigInteger.ONE);
+            return transactionCounter;
+        }
     }
 
     /**
@@ -91,8 +94,8 @@ public class TransactionModel implements Serializable {
      *
      * @return Сумма транзакции в виде строки.
      */
-    public String getAmount() {
-        return amount.toString();
+    public BigDecimal getAmount() {
+        return amount;
     }
 
     /**
@@ -100,7 +103,15 @@ public class TransactionModel implements Serializable {
      *
      * @return Дата транзакции в виде строки.
      */
-    public String getTransactionDate() {
-        return transactionDate.toString();
+    public Date getTransactionDate() {
+        return transactionDate;
+    }
+
+    public BigInteger getReceiverAccountId() {
+        return receiverAccountId;
+    }
+
+    public BigInteger getSenderAccountId() {
+        return senderAccountId;
     }
 }

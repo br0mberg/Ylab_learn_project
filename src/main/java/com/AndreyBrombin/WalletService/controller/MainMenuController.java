@@ -7,7 +7,7 @@ import com.AndreyBrombin.WalletService.infrastructure.DependencyContainer;
 import com.AndreyBrombin.WalletService.repository.AccountRepository;
 import com.AndreyBrombin.WalletService.service.Authorization.LoginService;
 import com.AndreyBrombin.WalletService.service.Authorization.RegistrationService;
-import com.AndreyBrombin.WalletService.service.ConfigService;
+import com.AndreyBrombin.WalletService.util.ConfigUtil;
 
 /**
  * Класс, управляющий главным меню приложения.
@@ -28,13 +28,13 @@ public class MainMenuController {
     public void start() {
         boolean isRunning = true;
         OutputHandler outputHandler = dependencyContainer.getOutputHandler();
-        ConfigService configService = dependencyContainer.getConfigService();
+        ConfigUtil configUtil = dependencyContainer.getConfigService();
         InputHandler inputHandler = dependencyContainer.getInputHandler();
 
-        outputHandler.printMessage(configService.getProperty("welcome.message"));
+        outputHandler.printMessage(configUtil.getProperty("welcome.message"));
 
         while (isRunning) {
-            outputHandler.printMessage(configService.getProperty("welcome.menu.message"));
+            outputHandler.printMessage(configUtil.getProperty("welcome.menu.message"));
             int choice = inputHandler.readInt();
 
             switch (choice) {
@@ -46,10 +46,10 @@ public class MainMenuController {
                     break;
                 case 3:
                     isRunning = false;
-                    outputHandler.printMessage(configService.getProperty("goodbye.message"));
+                    outputHandler.printMessage(configUtil.getProperty("goodbye.message"));
                     break;
                 default:
-                    outputHandler.printMessage(configService.getProperty("input.error"));
+                    outputHandler.printMessage(configUtil.getProperty("input.error"));
             }
         }
     }
@@ -58,26 +58,26 @@ public class MainMenuController {
      */
     public void handleLogin() {
         OutputHandler outputHandler = dependencyContainer.getOutputHandler();
-        ConfigService configService = dependencyContainer.getConfigService();
+        ConfigUtil configUtil = dependencyContainer.getConfigService();
         InputHandler inputHandler = dependencyContainer.getInputHandler();
         LoginService loginService = dependencyContainer.getLoginService();
         AccountRepository accountRepository = dependencyContainer.getAccountRepository();
 
         try {
-            outputHandler.printMessage(configService.getProperty("login.prompt"));
+            outputHandler.printMessage(configUtil.getProperty("login.prompt"));
             String login = inputHandler.readLine();
-            outputHandler.printMessage(configService.getProperty("password.prompt"));
+            outputHandler.printMessage(configUtil.getProperty("password.prompt"));
             String password = inputHandler.readLine();
 
             if (loginService.authenticateAccount(login, password)) {
-                outputHandler.printMessage(configService.getProperty("valid.credentials"));
+                outputHandler.printMessage(configUtil.getProperty("valid.credentials"));
                 PersonalAccountController personalAccountController = new PersonalAccountController(
                         dependencyContainer,
                         loginService.getAccountByLogin(login));
                 dependencyContainer.getAuditService().logLogin(login);
                 personalAccountController.start();
             } else {
-                outputHandler.printMessage(configService.getProperty("invalid.credentials"));
+                outputHandler.printMessage(configUtil.getProperty("invalid.credentials"));
             }
         } catch (Exception e) {
             CustomLogger.logError("An error occurred: " + e.getMessage(), e);
@@ -86,24 +86,24 @@ public class MainMenuController {
 
     private void handleRegistration() {
         OutputHandler outputHandler = dependencyContainer.getOutputHandler();
-        ConfigService configService = dependencyContainer.getConfigService();
+        ConfigUtil configUtil = dependencyContainer.getConfigService();
         InputHandler inputHandler = dependencyContainer.getInputHandler();
         RegistrationService registrationService = dependencyContainer.getRegistrationService();
 
         try {
-            outputHandler.printMessage(configService.getProperty("login.prompt"));
+            outputHandler.printMessage(configUtil.getProperty("login.prompt"));
             String login = inputHandler.readLine();
-            outputHandler.printMessage(configService.getProperty("password.prompt"));
+            outputHandler.printMessage(configUtil.getProperty("password.prompt"));
             String password = inputHandler.readLine();
-            outputHandler.printMessage(configService.getProperty("name.prompt"));
+            outputHandler.printMessage(configUtil.getProperty("name.prompt"));
             String name = inputHandler.readLine();
-            outputHandler.printMessage(configService.getProperty("surname.prompt"));
+            outputHandler.printMessage(configUtil.getProperty("surname.prompt"));
             String surname = inputHandler.readLine();
 
             if (registrationService.registerAccount(name, surname, login, password, dependencyContainer.getWalletRepository())) {
-                outputHandler.printMessage(configService.getProperty("registration.success"));
+                outputHandler.printMessage(configUtil.getProperty("registration.success"));
             } else {
-                outputHandler.printMessage(configService.getProperty("registration.error"));
+                outputHandler.printMessage(configUtil.getProperty("registration.error"));
             }
         } catch (Exception e) {
             CustomLogger.logError("An error occurred: " + e.getMessage(), e);

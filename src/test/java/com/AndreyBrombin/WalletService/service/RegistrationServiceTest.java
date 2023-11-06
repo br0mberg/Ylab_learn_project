@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.sql.SQLException;
+
 /**
  * Юнит-тесты для класса RegistrationService.
  */
@@ -40,7 +42,7 @@ class RegistrationServiceTest {
      * Тест метода registerAccount с успешной регистрацией аккаунта.
      */
     @Test
-    void testRegisterValidAccount() {
+    void testRegisterValidAccount() throws SQLException {
         // Arrange
         String name = "John";
         String surname = "Doe";
@@ -62,7 +64,7 @@ class RegistrationServiceTest {
      * Тест метода registerAccount при передаче недопустимых значений.
      */
     @Test
-    void testRegisterInvalidAccount() {
+    void testRegisterInvalidAccount() throws SQLException {
         // Arrange
         // Передача null значений, что должно вызвать проверку validateAccountData
         when(registerRepository.register(any(), any(), any(), any(), any())).thenReturn(false);
@@ -80,7 +82,7 @@ class RegistrationServiceTest {
      * Тест метода registerAccount с успешной регистрацией аккаунта, но недопустимым репозиторием.
      */
     @Test
-    void testRegisterValidAccountInvalidRepository() {
+    void testRegisterValidAccountInvalidRepository() throws SQLException {
         // Arrange
         String name = "John";
         String surname = "Doe";

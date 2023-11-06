@@ -1,4 +1,4 @@
-package com.AndreyBrombin.WalletService.service;
+package com.AndreyBrombin.WalletService.util;
 
 import com.AndreyBrombin.WalletService.Logger.CustomLogger;
 
@@ -9,14 +9,14 @@ import java.util.Properties;
 /**
  * Сервис для работы с конфигурационными данными.
  */
-public class ConfigService {
+public class ConfigUtil {
     private static final String CONFIG_FILE = "src/main/resources/config.properties";
     private Properties properties;
 
     /**
      * Конструктор класса ConfigService. Загружает конфигурационные данные из файла.
      */
-    public ConfigService() {
+    public ConfigUtil() {
         properties = new Properties();
         try {
             FileInputStream fileInputStream = new FileInputStream(CONFIG_FILE);

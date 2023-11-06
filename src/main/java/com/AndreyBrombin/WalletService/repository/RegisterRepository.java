@@ -1,5 +1,8 @@
 package com.AndreyBrombin.WalletService.repository;
 
+import java.math.BigInteger;
+import java.sql.SQLException;
+
 /**
  * Репозиторий, отвечающий за регистрацию новых пользователей.
  * Этот репозиторий позволяет создавать новые аккаунты и связанные с ними кошельки.
@@ -29,7 +32,7 @@ public class RegisterRepository {
      * @param walletRepository
      * @return true, если регистрация успешно завершена, false, если пользователь с таким логином уже существует.
      */
-    public boolean register(String name, String surname, String login, String password, WalletRepository walletRepository) {
+    public boolean register(String name, String surname, String login, String password, WalletRepository walletRepository) throws SQLException {
         if (accountRepository.register(name, surname, login, password, this.walletRepository)) {
             System.out.println("Регистрация успешно завершена.");
             return true;

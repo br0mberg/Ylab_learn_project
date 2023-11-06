@@ -1,15 +1,15 @@
 package com.AndreyBrombin.WalletService.repository;
 
 import com.AndreyBrombin.WalletService.Logger.CustomLogger;
+import com.AndreyBrombin.WalletService.jdbc.ConnectionManager;
 import com.AndreyBrombin.WalletService.model.WalletModel;
 
-import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Репозиторий для управления кошельками.
@@ -17,16 +17,13 @@ import java.util.logging.Logger;
  * сохранять данные о кошельках в файле.
  */
 public class WalletRepository {
-    private List<WalletModel> wallets;
-    private String filePath;
+    private Connection connection;
 
     /**
-     * Создает новый экземпляр репозитория кошельков с указанным путем к файлу.
-     * @param filePath Путь к файлу, в котором хранятся данные о кошельках.
+     * Создает новый экземпляр репозитория кошельков.
      */
-    public WalletRepository(String filePath) {
-        this.filePath = filePath;
-        wallets = new ArrayList<>();
+    public WalletRepository() {
+        this.connection = ConnectionManager.open();
     }
 
     /**
@@ -34,58 +31,54 @@ public class WalletRepository {
      * @param wallet Новый кошелек для добавления.
      */
     public void addWallet(WalletModel wallet) {
-        wallets.add(wallet);
-        saveWalletsToFile();
-    }
+        String insertWalletSQL = "INSERT INTO wallets_table (id, owner_id, wallet_name, balance) VALUES (?, ?, ?, ?)";
 
+        try {
+            connection.setAutoCommit(false);
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertWalletSQL)) {
+                preparedStatement.setObject(1, wallet.getId());
+                preparedStatement.setObject(2, wallet.getOwnerId());
+                preparedStatement.setObject(3, wallet.getName());
+                preparedStatement.setBigDecimal(4, wallet.getBalance());
+
+                if (preparedStatement.executeUpdate() == 1) {
+                    connection.commit();
+                } else {
+                    connection.rollback();
+                }
+            }
+        } catch (SQLException e) {
+            CustomLogger.logError("Ошибка записи кошелька в базу данных", e);
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackException) {
+                CustomLogger.logError("Ошибка при откате транзакции.", rollbackException);
+            }
+        }
+    }
     /**
      * Возвращает список всех существующих кошельков, загружая их из файла при необходимости.
      * @return Список всех кошельков.
      */
     public List<WalletModel> getAllWallets() {
-        loadWalletsFromFile();
-        return wallets;
-    }
+        List<WalletModel> wallets = new ArrayList<>();
+        String selectWalletsSQL = "SELECT * FROM wallets_table";
 
-    /**
-     * Загружает список кошельков из файла.
-     *
-     * @throws IOException            Если произошла ошибка ввода/вывода при чтении файла.
-     * @throws ClassNotFoundException   Если возникла ошибка при десериализации объектов из файла.
-     */
-    private void loadWalletsFromFile() {
-        try {
-            File file = new File(filePath);
-
-            if (file.exists() && file.length() > 0) {
-                FileInputStream fileInputStream = new FileInputStream(filePath);
-                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-                wallets = (List<WalletModel>) objectInputStream.readObject();
-                objectInputStream.close();
-                CustomLogger.logInfo("Wallets loaded from file.");
-            } else {
-                CustomLogger.logInfo("Wallet file is empty or does not exist.");
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectWalletsSQL);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                BigInteger id = (BigInteger) resultSet.getObject("id");
+                BigInteger ownerId = (BigInteger) resultSet.getObject("owner_id");
+                String walletName = resultSet.getString("wallet_name");
+                BigDecimal balance = resultSet.getBigDecimal("balance");
+                WalletModel wallet = new WalletModel(id, ownerId,walletName, balance);
+                wallets.add(wallet);
             }
-        } catch (IOException | ClassNotFoundException e) {
-            CustomLogger.logError( "Error loading wallets from file.", e);
+        } catch (SQLException e) {
+            CustomLogger.logError("Ошибка получения списка кошельков из базы данных", e);
         }
-    }
-
-    /**
-     * Сохраняет список кошельков в файл.
-     *
-     * @throws IOException Если произошла ошибка ввода/вывода при записи в файл.
-     */
-    private void saveWalletsToFile() {
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(filePath);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(wallets);
-            objectOutputStream.close();
-            CustomLogger.logInfo("Wallets saved to file.");
-        } catch (IOException e) {
-            CustomLogger.logError( "Error saving wallets to file.", e);
-        }
+        return wallets;
     }
 
     /**
@@ -94,28 +87,29 @@ public class WalletRepository {
      * @param updatedWallet Обновленный кошелек.
      * @return true, если обновление успешно выполнено, иначе false.
      */
-    public boolean updateWallet(WalletModel updatedWallet) {
-        loadWalletsFromFile();
-        boolean walletUpdated = false;
+    public boolean updateWalletBalance(WalletModel updatedWallet) {
+        String updateWalletSQL = "UPDATE wallets_table SET balance = ? WHERE owner_id = ?";
 
-        for (int i = 0; i < wallets.size(); i++) {
-            WalletModel wallet = wallets.get(i);
-            if (wallet.getOwnerId().equals(updatedWallet.getOwnerId())) {
-                wallets.set(i, updatedWallet);
-
-                saveWalletsToFile();
-                walletUpdated = true;
-                break;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(updateWalletSQL)) {
+            preparedStatement.setBigDecimal(1, updatedWallet.getBalance());
+            preparedStatement.setObject(2, updatedWallet.getOwnerId());
+            connection.setAutoCommit(false);
+            int rowsUpdated = preparedStatement.executeUpdate();
+             if(rowsUpdated > 0) {
+                 connection.commit();
+                 return true;
+             }
+             connection.rollback();
+            return false;
+        } catch (SQLException e) {
+            CustomLogger.logError("Ошибка обновления баланса кошелька", e);
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackException) {
+                CustomLogger.logError("Ошибка при откате транзакции.", rollbackException);
             }
+            return false;
         }
-
-        if (walletUpdated) {
-            CustomLogger.logInfo("Wallet updated: " + updatedWallet.getId());
-        } else {
-            CustomLogger.logWarning("Wallet not found for update: " + updatedWallet.getId());
-        }
-
-        return walletUpdated;
     }
 
     /**
@@ -123,16 +117,23 @@ public class WalletRepository {
      *
      * @param ownerId Идентификатор владельца кошелька.
      * @return Объект кошелька, соответствующий указанному ownerId, или null, если кошелек не найден.
-     * @throws IOException            Если произошла ошибка ввода/вывода при чтении файла.
-     * @throws ClassNotFoundException   Если возникла ошибка при десериализации объектов из файла.
      */
     public WalletModel getWalletById(BigInteger ownerId) {
-        loadWalletsFromFile();
+        String selectWalletSQL = "SELECT * FROM wallets_table WHERE owner_id = ?";
 
-        for (WalletModel wallet : wallets) {
-            if (wallet.getOwnerId().equals(ownerId)) {
-                return wallet;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectWalletSQL)) {
+            preparedStatement.setObject(1, ownerId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    BigInteger id = BigInteger.valueOf(resultSet.getLong("id"));
+                    String walletName = resultSet.getString("wallet_name");
+                    BigDecimal balance = resultSet.getBigDecimal("balance");
+                    return new WalletModel(id, ownerId,walletName, balance);
+                }
             }
+        } catch (SQLException e) {
+            CustomLogger.logError("Ошибка получения кошелька по id владельца", e);
         }
 
         return null;
@@ -150,5 +151,25 @@ public class WalletRepository {
             return wallet.getBalance();
         }
         return BigDecimal.ZERO;
+    }
+
+    /**
+     * Генерирует walletId с помощью Sequence.
+     */
+    public BigInteger generateTransactionIdFromSequence() {
+        BigInteger walletId = null;
+
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery("SELECT nextval('wallet_id_sequence')");
+            if (resultSet.next()) {
+                walletId = BigInteger.valueOf(resultSet.getLong(1));
+            } else {
+                CustomLogger.logInfo("Ошибка в работе sequence");
+            }
+        } catch (SQLException e) {
+            CustomLogger.logError("Ошибка при генерации accountId из Sequence", e);
+        }
+
+        return walletId;
     }
 }
